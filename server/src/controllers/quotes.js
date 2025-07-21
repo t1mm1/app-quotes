@@ -8,7 +8,7 @@ module.exports.getAllQuotes = async (request, responce) => {
         responce.json(quotes);
     }
     catch (error) {
-        responce.status(500).send({ 
+        responce.status(500).json({ 
             message: error.message,
         })
     }
@@ -29,7 +29,7 @@ module.exports.getQuoteById = async (request, responce) => {
         }
     }
     catch (error) {
-        responce.status(500).send({
+        responce.status(500).json({
             message: error.message,
         })
     }   
@@ -43,8 +43,22 @@ module.exports.getRandomQuotes = async (request, responce) => {
         responce.json(quotes);
     }
     catch (error) {
-        responce.status(500).send({
+        responce.status(500).json({
             message: error.message,
         })
+    }
+}
+
+module.exports.postQuote = async (request, response) => {
+    const { text, author, categories } = request.body;
+
+    try {
+        const quote = await quoteService.createQuote({ text, author, categories });
+        response.status(200).json(quote);
+    }
+    catch (error) {
+        response.status(500).json({
+            message: error.message
+        });
     }
 }

@@ -60,3 +60,24 @@ module.exports.findRandomQuotes = async (limit) => {
         include: includeCategoryConfig
     });
 }
+
+module.exports.createQuote = async ({ text, author, categories }) => {
+    const id = await sequelize.transaction(async (t) => {
+        const quote = await Quote.create({ text, author }, { transaction: t });
+
+        const categoriesInstance = await Promise.all(
+            categories.map((name) => 
+                Category.findOrCreate({
+                    where: { name },
+                    transaction: t,
+                }).then(([category]) => category)
+            )
+        );
+
+        await quote.setCategories(categoriesInstance, { transaction: t });
+
+        return quote.id;
+    });
+
+    return await this.findSingleQuote(id);
+}

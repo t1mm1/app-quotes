@@ -10,7 +10,7 @@ module.exports.getAllCategories = async (request, responce) => {
         responce.json(quotes);
     }
     catch (error) {
-        responce.status(500).send({
+        responce.status(500).json({
             message: error.message,
         })
     }
@@ -32,7 +32,7 @@ module.exports.getCategoryById = async (request, responce) => {
         }
     }
     catch (error) {
-        responce.status(500).send({
+        responce.status(500).json({
             message: error.message,
         })
     }
@@ -46,7 +46,7 @@ module.exports.getRandomCategories = async (request, responce) => {
         responce.json(categories);
     }
     catch (error) {
-        responce.status(500).send({
+        responce.status(500).json({
             message: error.message,
         })
     }

@@ -29,4 +29,12 @@ router.get(
     controller.getQuoteById,
 );
 
+// Post new quote.
+router.post(
+    '/', 
+    quoteValidators.postQuoteValidators,
+    validationErrorHandler.validationErrorHandler,
+    controller.postQuote,
+);
+
 module.exports = router;
