@@ -6,8 +6,8 @@ const sequelize = require('../config/database');
  * Through/junction table for many-to-many association between Quote and Category.
  *
  * @typedef {Object} QuoteCategory
- * @property {number} QuoteId - Foreign key referencing the Quote.
- * @property {number} CategoryId - Foreign key referencing the Category.
+ * @property {number} QuoteId
+ * @property {number} CategoryId
  */
 
 const QuoteCategory = sequelize.define(

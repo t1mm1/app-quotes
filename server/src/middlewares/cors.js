@@ -1,1 +1,2 @@
-// CORs middleware.
+const cors = require('cors');
+module.exports = cors({ origin: '*' });

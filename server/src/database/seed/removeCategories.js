@@ -14,10 +14,10 @@ const QuoteCategory = require('../../models/QuoteCategory');
  * 2. Finds and deletes quotes without any categories.
  *
  * @async
- * @function removeRareCategories
+ * @function removeCategories
  * @returns {Promise<void>}
  */
-async function removeRareCategories() {
+async function removeCategories() {
   try {
     // STEP 1. Remove rare categories
     // Find categories that appear only in one or two quotes
@@ -71,4 +71,4 @@ async function removeRareCategories() {
   }
 }
 
-removeRareCategories();
+removeCategories();

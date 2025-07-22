@@ -4,25 +4,39 @@ const Quote = require('../models/Quote');
 const sequelize = require('../config/database');
 
 const attributes = { exclude: ['createdAt', 'updatedAt'] };
-const includeCategoryConfig = {
+const include = {
   model: Category,
   attributes: ['name'],
   through: { attributes: [] },
 };
 
 /**
+ * Create categories.
+ */
+module.exports.createCategories = async ({ categories, transaction }) => {
+  return await Promise.all(
+    categories.map((name) =>
+      Category.findOrCreate({
+        where: { name },
+        transaction: transaction,
+      }).then(([category]) => category)
+    )
+  );
+};
+
+/**
  * Retrieves a list of quotes with optional filters and pagination.
  *
  * @async
- * @function findQuotes
- * @param {number} [limit] - Maximum number of quotes to retrieve.
- * @param {number} [offset] - Number of quotes to skip (for pagination).
- * @param {string} [author] - Filter by author name (substring match).
- * @param {string} [text] - Filter by quote text (substring match).
- * @param {string} [category] - Filter by category name.
- * @returns {Promise<Array<Quote>>} List of quote instances.
+ * @function getQuotes
+ * @param {number} [limit]
+ * @param {number} [offset]
+ * @param {string} [author]
+ * @param {string} [text]
+ * @param {string} [category]
+ * @returns {Promise<Array<Quote>>}
  */
-module.exports.findQuotes = async ({
+module.exports.getQuotes = async ({
   limit,
   offset,
   author,
@@ -39,7 +53,7 @@ module.exports.findQuotes = async ({
     offset: offset,
     order: [['id', 'ASC']],
     include: {
-      ...includeCategoryConfig,
+      ...include,
       where: category ? { name: category } : {},
     },
     where: whereClause,
@@ -52,7 +66,7 @@ module.exports.findQuotes = async ({
     quotes = await Quote.findAll({
       attributes,
       order: [['id', 'ASC']],
-      include: includeCategoryConfig,
+      include: include,
       where: { id: ids },
     });
   }
@@ -64,14 +78,14 @@ module.exports.findQuotes = async ({
  * Retrieves a single quote by its unique ID.
  *
  * @async
- * @function findSingleQuote
- * @param {number|string} id - The unique identifier of the quote.
- * @returns {Promise<Quote|null>} The quote instance or null if not found.
+ * @function getQuote
+ * @param {number|string} id
+ * @returns {Promise<Quote|null>}
  */
-module.exports.findSingleQuote = async ({ id }) => {
+module.exports.getQuote = async ({ id }) => {
   return await Quote.findByPk(id, {
     attributes: attributes,
-    include: includeCategoryConfig,
+    include: include,
   });
 };
 
@@ -79,16 +93,16 @@ module.exports.findSingleQuote = async ({ id }) => {
  * Retrieves a list of random quotes.
  *
  * @async
- * @function findRandomQuotes
- * @param {number} limit - Maximum number of random quotes to retrieve.
- * @returns {Promise<Array<Quote>>} List of random quote instances.
+ * @function getRandom
+ * @param {number} limit
+ * @returns {Promise<Array<Quote>>}
  */
-module.exports.findRandomQuotes = async ({ limit }) => {
+module.exports.getRandom = async ({ limit }) => {
   return await Quote.findAll({
     attributes: attributes,
     limit: limit,
     order: sequelize.random(),
-    include: includeCategoryConfig,
+    include: include,
   });
 };
 
@@ -97,31 +111,22 @@ module.exports.findRandomQuotes = async ({ limit }) => {
  *
  * @async
  * @function createQuote
- * @param {Object} quoteData - Data for the new quote.
- * @param {string} quoteData.text - The quote text.
- * @param {string} quoteData.author - The author of the quote.
- * @param {Array<string>} quoteData.categories - Array of categories to associate with the quote.
- * @returns {Promise<Quote>} The created quote instance.
+ * @param {Object} quoteData
+ * @param {string} quoteData.text
+ * @param {string} quoteData.author
+ * @param {Array<string>} quoteData.categories
+ * @returns {Promise<Quote>}
  */
 module.exports.createQuote = async ({ text, author, categories }) => {
-  const id = await sequelize.transaction(async (t) => {
+  const created = await sequelize.transaction(async (t) => {
     const quote = await Quote.create({ text, author }, { transaction: t });
-
-    const categoriesInstance = await Promise.all(
-      categories.map((name) =>
-        Category.findOrCreate({
-          where: { name },
-          transaction: t,
-        }).then(([category]) => category)
-      )
-    );
-
-    await quote.setCategories(categoriesInstance, { transaction: t });
+    const instance = await this.createCategories({ categories, t });
+    await quote.setCategories(instance, { transaction: t });
 
     return quote.id;
   });
 
-  return await this.findSingleQuote({ id });
+  return await this.getQuote({ id: created });
 };
 
 /**
@@ -129,11 +134,55 @@ module.exports.createQuote = async ({ text, author, categories }) => {
  *
  * @async
  * @function deleteQuote
- * @param {number|string} id - The unique identifier of the quote.
+ * @param {number|string} id
  */
 module.exports.deleteQuote = async ({ id }) => {
   const count = await Quote.destroy({ where: { id } });
   if (count) {
     return id;
   }
+};
+
+/**
+ * Edit an quote and associates it with categories.
+ *
+ * @async
+ * @function editQuote
+ * @param {Object} quoteData
+ * @param {string} quoteData.text
+ * @param {string} quoteData.author
+ * @param {Array<string>} quoteData.categories
+ * @returns {Promise<Quote>}
+ */
+module.exports.editQuote = async ({ id, text, author, categories }) => {
+  const modified = await sequelize.transaction(async (t) => {
+    const quote = await Quote.findByPk(id, {
+      attributes: attributes,
+      include: include,
+      transaction: t,
+    });
+
+    if (!quote) {
+      return null;
+    }
+
+    if (text) {
+      quote.text = text;
+    }
+
+    if (author) {
+      quote.author = author;
+    }
+
+    await quote.save({ transaction: t });
+
+    if (categories) {
+      const instance = await this.createCategories({ categories, t });
+      await quote.setCategories(instance, { transaction: t });
+    }
+
+    return quote.id;
+  });
+
+  return await this.getQuote({ id: modified });
 };

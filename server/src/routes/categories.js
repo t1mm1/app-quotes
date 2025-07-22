@@ -8,58 +8,58 @@ const express = require('express');
 
 const router = express.Router();
 const controller = require('../controllers/categories');
-const validationErrorHandler = require('../middlewares/validationErrorHandler');
-const categoryValidators = require('../middlewares/categoryValidators');
+const handler = require('../middlewares/handler');
+const validators = require('../middlewares/category');
 
 /**
  * GET /categories
  * Returns a list of all categories.
  *
- * @name GetAllCategories
+ * @name getCategories
  * @route {GET} /
- * @middleware {Function} categoryValidators.getCategoriesQueryValidators - Validates query parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getAllCategories - Returns categories
+ * @middleware {Function} validators.getCategories - Validates query parameters
+ * @middleware {Function} handler.handler - Handles validation errors
+ * @handler {Function} controller.getCategories - Returns categories
  */
 router.get(
   '/',
-  categoryValidators.getCategoriesQueryValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getAllCategories
+  validators.getCategories,
+  handler.handler,
+  controller.getCategories
 );
 
 /**
  * GET /categories/random
  * Returns a list of random categories.
  *
- * @name GetRandomCategories
+ * @name getRandom
  * @route {GET} /random
- * @middleware {Function} categoryValidators.getRandomCategoriesValidators - Validates query parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getRandomCategories - Returns random categories
+ * @middleware {Function} validators.getRandom - Validates query parameters
+ * @middleware {Function} handler.handler - Handles validation errors
+ * @handler {Function} controller.getRandom - Returns random categories
  */
 router.get(
   '/random',
-  categoryValidators.getRandomCategoriesValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getRandomCategories
+  validators.getRandom,
+  handler.handler,
+  controller.getRandom
 );
 
 /**
  * GET /categories/:id
  * Returns a category by its ID.
  *
- * @name GetCategoryById
+ * @name getCategory
  * @route {GET} /:id
- * @middleware {Function} categoryValidators.getCategoryParamValidators - Validates route parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getCategoryById - Returns category by id
+ * @middleware {Function} validators.getCategory - Validates route parameters
+ * @middleware {Function} handler.handler - Handles validation errors
+ * @handler {Function} controller.getCategory - Returns category by id
  */
 router.get(
   '/:id',
-  categoryValidators.getCategoryParamValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getCategoryById
+  validators.getCategory,
+  handler.handler,
+  controller.getCategory
 );
 
 module.exports = router;

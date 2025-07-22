@@ -8,11 +8,11 @@ const CATEGORY_NAME_I_REGEX = /^[a-z0-9\-]+$/i;
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @query {number} [limit] - Optional limit (1-50)
- * @query {number} [offset] - Optional offset (min: 0)
- * @query {string} [name] - Optional category name (letters, numbers, dashes, case-insensitive)
+ * @query {number} [limit]
+ * @query {number} [offset]
+ * @query {string} [name]
  */
-module.exports.getCategoriesQueryValidators = [
+module.exports.getCategories = [
   query('limit').optional().trim().isInt({ min: 1, max: 50 }),
   query('offset').optional().trim().isInt({ min: 0 }),
   query('name')
@@ -33,19 +33,17 @@ module.exports.getCategoriesQueryValidators = [
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @param {number} id - Category ID (integer >= 1)
+ * @param {number} id [id]
  */
-module.exports.getCategoryParamValidators = [
-  param('id').trim().isInt({ min: 1 }),
-];
+module.exports.getCategory = [param('id').trim().isInt({ min: 1 })];
 
 /**
  * Validation rules for GET /categories/random query parameters.
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @query {number} [limit] - Optional limit (1-20)
+ * @query {number} [limit]
  */
-module.exports.getRandomCategoriesValidators = [
+module.exports.getRandom = [
   query('limit').optional().trim().isInt({ min: 1, max: 20 }),
 ];

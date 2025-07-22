@@ -11,14 +11,14 @@ const Category = require('./Category');
  * instead of Sequelize relation objects.
  *
  * @typedef {Object} Quote
- * @property {string} text - The text of the quote.
- * @property {string} [author] - The author of the quote.
- * @property {Date} createdAt - The creation date of the quote.
- * @property {string[]} [categoies] - Array of category names associated with the quote (afterFind hook).
+ * @property {string} text
+ * @property {string} [author]
+ * @property {Date} createdAt
+ * @property {string[]} [categories]
  */
 
 /**
- * AfterFind hook: Adds a "categoies" property (array of category names) to each quote instance,
+ * AfterFind hook: Adds a "categories" property (array of category names) to each quote instance,
  * and removes the original Categories association property. (NB: typo preserved if intentional)
  *
  * @param {Quote|Quote[]} results - Single quote or array of quote instances returned from a query.
@@ -30,7 +30,7 @@ const afterFind = (results) => {
     quotes.forEach((quote) => {
       if (quote.Categories) {
         // NB: If the property should be named "categories" (correct spelling!), update both assignment and usage here and elsewhere.
-        quote.dataValues.categoies = quote.Categories.map(
+        quote.dataValues.categories = quote.Categories.map(
           (category) => category.name
         );
         delete quote.dataValues.Categories;

@@ -8,60 +8,50 @@ const express = require('express');
 
 const router = express.Router();
 const controller = require('../controllers/quotes');
-const validationErrorHandler = require('../middlewares/validationErrorHandler');
-const quoteValidators = require('../middlewares/quoteValidators');
+const handler = require('../middlewares/handler');
+const validators = require('../middlewares/quote');
 
 /**
  * GET /quotes
  * Retrieve all quotes.
  *
- * @name GetAllQuotes
+ * @name GetQuotes
  * @route {GET} /
- * @middleware {Function} quoteValidators.getQuotesQueryValidators - Validates query parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getAllQuotes - Returns all quotes
+ * @middleware {Function}
+ * @middleware {Function}
+ * @handler {Function}
  */
-router.get(
-  '/',
-  quoteValidators.getQuotesQueryValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getAllQuotes
-);
+router.get('/', validators.getQuotes, handler.handler, controller.getQuotes);
 
 /**
  * GET /quotes/random
  * Retrieve a list of random quotes.
  *
- * @name GetRandomQuotes
+ * @name GetRandom
  * @route {GET} /random
- * @middleware {Function} quoteValidators.getRandomQuotesValidators - Validates query parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getRandomQuotes - Returns random quotes
+ * @middleware {Function}
+ * @middleware {Function}
+ * @handler {Function}
  */
 router.get(
   '/random',
-  quoteValidators.getRandomQuotesValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getRandomQuotes
+  validators.getRandom,
+  handler.handler,
+  controller.getRandom
 );
 
 /**
  * GET /quotes/:id
  * Retrieve a quote by its ID.
  *
- * @name GetQuoteById
+ * @name GetQuote
  * @route {GET} /:id
  * @param {string} id - Quote ID
- * @middleware {Function} quoteValidators.getQuoteParamValidators - Validates route parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @handler {Function} controller.getQuoteById - Returns the quote by ID
+ * @middleware {Function}
+ * @middleware {Function}
+ * @handler {Function}
  */
-router.get(
-  '/:id',
-  quoteValidators.getQuoteParamValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.getQuoteById
-);
+router.get('/:id', validators.getQuote, handler.handler, controller.getQuote);
 
 /**
  * POST /quotes
@@ -69,16 +59,29 @@ router.get(
  *
  * @name PostQuote
  * @route {POST} /
- * @middleware {Function} quoteValidators.postQuoteValidators - Validates request body
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @param {object} req.body - Quote data
- * @handler {Function} controller.postQuote - Creates a new quote
+ * @middleware {Function}
+ * @middleware {Function}
+ * @param {object} req.body
+ * @handler {Function}
  */
-router.post(
-  '/',
-  quoteValidators.postQuoteValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.postQuote
+router.post('/', validators.postQuote, handler.handler, controller.postQuote);
+
+/**
+ * DELETE /quotes/:id
+ * Delete quote by ID.
+ *
+ * @name PostQuote
+ * @route {DELETE} /:id
+ * @middleware {Function}
+ * @middleware {Function}
+ * @param {string} id
+ * @handler {Function}
+ */
+router.delete(
+  '/:id',
+  validators.getQuote,
+  handler.handler,
+  controller.deleteQuote
 );
 
 /**
@@ -87,16 +90,16 @@ router.post(
  *
  * @name PostQuote
  * @route {DELETE} /:id
- * @middleware {Function} quoteValidators.getQuoteParamValidators - Validates route parameters
- * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
- * @param {string} id - Quote ID
- * @handler {Function} controller.deleteQuote - Delete quote by ID
+ * @middleware {Function}
+ * @middleware {Function}
+ * @param {string} id
+ * @handler {Function}
  */
-router.delete(
+router.patch(
   '/:id',
-  quoteValidators.getQuoteParamValidators,
-  validationErrorHandler.validationErrorHandler,
-  controller.deleteQuote
+  validators.patchQuote,
+  handler.handler,
+  controller.patchQuote
 );
 
 module.exports = router;

@@ -22,7 +22,8 @@ const start = async () => {
     await sync.init();
 
     const port = process.env.PORT || 3000;
-    app.listen(port, () => {
+    const host = process.env.HOST || '0.0.0.0';
+    app.listen(port, host, () => {
       console.log(`Server was started on ${port} port.`);
     });
   } catch (error) {

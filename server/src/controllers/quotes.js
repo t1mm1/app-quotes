@@ -1,22 +1,22 @@
-const quoteService = require('../services/quote');
+const service = require('../services/quote');
 
 /**
  * Controller to get all quotes.
  *
  * @async
- * @function getAllQuotes
- * @param {import('express').Request} request - Express request object (query: limit, offset, author, text, category)
- * @param {import('express').Response} response - Express response object
+ * @function getQuotes
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /quotes?limit=10&offset=0&author=twain&text=life&category=science
  */
-module.exports.getAllQuotes = async (request, response) => {
+module.exports.getQuotes = async (request, response) => {
   const { limit = 5, offset = 0, author, text, category } = request.query;
 
   try {
-    const quotes = await quoteService.findQuotes({
+    const quotes = await service.getQuotes({
       limit,
       offset,
       author,
@@ -35,19 +35,19 @@ module.exports.getAllQuotes = async (request, response) => {
  * Controller to get a quote by its ID.
  *
  * @async
- * @function getQuoteById
- * @param {import('express').Request} request - Express request object (params: id)
- * @param {import('express').Response} response - Express response object
+ * @function getQuote
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /quotes/23
  */
-module.exports.getQuoteById = async (request, response) => {
+module.exports.getQuote = async (request, response) => {
   const id = request.params.id;
 
   try {
-    const quote = await quoteService.findSingleQuote({ id });
+    const quote = await service.getQuote({ id });
     if (quote) {
       response.json(quote);
     } else {
@@ -66,19 +66,19 @@ module.exports.getQuoteById = async (request, response) => {
  * Controller to get a list of random quotes.
  *
  * @async
- * @function getRandomQuotes
- * @param {import('express').Request} request - Express request object (query: limit)
- * @param {import('express').Response} response - Express response object
+ * @function getRandom
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /quotes/random?limit=3
  */
-module.exports.getRandomQuotes = async (request, response) => {
+module.exports.getRandom = async (request, response) => {
   const { limit = 5 } = request.query;
 
   try {
-    const quotes = await quoteService.findRandomQuotes({ limit });
+    const quotes = await service.getRandom({ limit });
     response.json(quotes);
   } catch (error) {
     response.status(500).json({
@@ -92,8 +92,8 @@ module.exports.getRandomQuotes = async (request, response) => {
  *
  * @async
  * @function postQuote
- * @param {import('express').Request} request - Express request object (body: text, author, categories)
- * @param {import('express').Response} response - Express response object
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
@@ -104,7 +104,7 @@ module.exports.postQuote = async (request, response) => {
   const { text, author, categories } = request.body;
 
   try {
-    const quote = await quoteService.createQuote({ text, author, categories });
+    const quote = await service.createQuote({ text, author, categories });
     response.status(200).json(quote);
   } catch (error) {
     response.status(500).json({
@@ -118,8 +118,8 @@ module.exports.postQuote = async (request, response) => {
  *
  * @async
  * @function deleteQuote
- * @param {import('express').Request} request - Express request object (params: id)
- * @param {import('express').Response} response - Express response object
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
@@ -129,7 +129,8 @@ module.exports.deleteQuote = async (request, response) => {
   const id = request.params.id;
 
   try {
-    const deleted = await quoteService.deleteQuote({ id });
+    const deleted = await service.deleteQuote({ id });
+
     if (deleted) {
       response.status(200).json({
         message: `Quote with ID ${deleted} was deleted.`,
@@ -139,6 +140,38 @@ module.exports.deleteQuote = async (request, response) => {
         message: `Quote with ID ${id} was not found.`,
       });
     }
+  } catch (error) {
+    response.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+/**
+ * Controller to patch/edit an quote.
+ *
+ * @async
+ * @function patchQuote
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // PATCH /quote/:id
+ * // body: { "text": "Life is beautiful.", "author": "Unknown", "categories": ["life"] }
+ */
+module.exports.patchQuote = async (request, response) => {
+  const { text, author, categories } = request.body;
+  const id = request.params.id;
+
+  try {
+    const quote = await service.editQuote({
+      id,
+      text,
+      author,
+      categories,
+    });
+    response.status(200).json(quote);
   } catch (error) {
     response.status(500).json({
       message: error.message,

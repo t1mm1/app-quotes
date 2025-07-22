@@ -85,12 +85,12 @@ async function importQuotes() {
         }
 
         // 4. Find categories in the quote's table.
-        const categoryInstances = await Category.findAll({
+        const instance = await Category.findAll({
           where: { name: categories },
         });
 
         // 5. Add categories to quote.
-        await quote.addCategories(categoryInstances);
+        await quote.addCategories(instance);
       })
       .on('end', () =>
         console.log(`Processing of the CSV file with quotes finished.`)

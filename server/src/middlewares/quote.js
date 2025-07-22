@@ -8,13 +8,13 @@ const CATEGORY_NAME_REGEX = /^[a-z0-9\-]+$/;
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @query {number} [limit] - Optional limit (1-50)
- * @query {number} [offset] - Optional offset (min: 0)
- * @query {string} [author] - Optional author (string, escaped)
- * @query {string} [text] - Optional quote text (string, escaped)
- * @query {string} [category] - Optional category (lowercase, numbers, dashes)
+ * @query {number} [limit]
+ * @query {number} [offset]
+ * @query {string} [author]
+ * @query {string} [text]
+ * @query {string} [category]
  */
-module.exports.getQuotesQueryValidators = [
+module.exports.getQuotes = [
   query('limit').optional().trim().isInt({ min: 1, max: 50 }),
   query('offset').optional().trim().isInt({ min: 0 }),
   query('author').optional().trim().escape(),
@@ -37,18 +37,18 @@ module.exports.getQuotesQueryValidators = [
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @param {number} id - Quote ID (integer >= 1)
+ * @param {number} id [id]
  */
-module.exports.getQuoteParamValidators = [param('id').trim().isInt({ min: 1 })];
+module.exports.getQuote = [param('id').trim().isInt({ min: 1 })];
 
 /**
  * Validation rules for GET /quotes/random route query parameters.
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @query {number} [limit] - Optional limit (1-20)
+ * @query {number} [limit]
  */
-module.exports.getRandomQuotesValidators = [
+module.exports.getRandom = [
   query('limit').optional().trim().isInt({ min: 1, max: 20 }),
 ];
 
@@ -57,11 +57,11 @@ module.exports.getRandomQuotesValidators = [
  *
  * @type {Array<import('express-validator').ValidationChain>}
  *
- * @body {string} text - The quote text (min length: 10)
- * @body {string} author - The quote author (2-255 characters)
- * @body {Array<string>} categories - Array of category names (at least one, each matching CATEGORY_NAME_REGEX)
+ * @body {string} text
+ * @body {string} author
+ * @body {Array<string>} categories
  */
-module.exports.postQuoteValidators = [
+module.exports.postQuote = [
   body('text')
     .trim()
     .isString()
@@ -76,6 +76,42 @@ module.exports.postQuoteValidators = [
     .isArray({ min: 1 })
     .withMessage('Categories must be an array with at least one category.'),
   body('categories.*')
+    .trim()
+    .matches(CATEGORY_NAME_REGEX)
+    .withMessage(
+      'Each category must contain only lowercase letters, numbers and dashes.'
+    ),
+];
+
+/**
+ * Validation rules for PATCH /quotes/:id request body.
+ *
+ * @type {Array<import('express-validator').ValidationChain>}
+ *
+ * @body {string} text
+ * @body {string} author
+ * @body {Array<string>} categories
+ */
+module.exports.patchQuote = [
+  param('id').trim().isInt({ min: 1 }),
+  body('text')
+    .optional()
+    .trim()
+    .isString()
+    .isLength({ min: 10 })
+    .withMessage('Text is required and has to be minimum 10 characters.'),
+  body('author')
+    .optional()
+    .trim()
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Author must be a string from 2 to 255 characters.'),
+  body('categories')
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage('Categories must be an array with at least one category.'),
+  body('categories.*')
+    .optional()
     .trim()
     .matches(CATEGORY_NAME_REGEX)
     .withMessage(

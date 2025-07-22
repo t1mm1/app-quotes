@@ -8,13 +8,13 @@ const attributes = { exclude: ['createdAt', 'updatedAt'] };
  * Retrieves a list of categories with optional filters and pagination.
  *
  * @async
- * @function findCategories
- * @param {number} [limit] - Maximum number of categories to retrieve.
- * @param {number} [offset] - Number of categories to skip (for pagination).
- * @param {string} [name] - Filter by category name (substring match).
- * @returns {Promise<Array<Category>>} List of category instances.
+ * @function getCategories
+ * @param {number} [limit]
+ * @param {number} [offset]
+ * @param {string} [name]
+ * @returns {Promise<Array<Category>>}
  */
-module.exports.findCategories = async ({ limit, offset, name }) => {
+module.exports.getCategories = async ({ limit, offset, name }) => {
   const whereClause = {};
   name && (whereClause.name = { [Op.like]: `%${name}%` });
 
@@ -31,11 +31,11 @@ module.exports.findCategories = async ({ limit, offset, name }) => {
  * Retrieves a single category by its unique ID.
  *
  * @async
- * @function findSingleCategory
- * @param {number|string} id - The unique identifier of the category.
- * @returns {Promise<Category|null>} The category instance or null if not found.
+ * @function getCategory
+ * @param {number|string} id
+ * @returns {Promise<Category|null>}
  */
-module.exports.findSingleCategory = async ({ id }) => {
+module.exports.getCategory = async ({ id }) => {
   return await Category.findByPk(id, {
     attributes: attributes,
   });
@@ -45,11 +45,11 @@ module.exports.findSingleCategory = async ({ id }) => {
  * Retrieves a list of random categories.
  *
  * @async
- * @function findRandomCategories
- * @param {number} limit - Maximum number of random categories to retrieve.
- * @returns {Promise<Array<Category>>} List of random category instances.
+ * @function getRandom
+ * @param {number} limit
+ * @returns {Promise<Array<Category>>}
  */
-module.exports.findRandomCategories = async ({ limit }) => {
+module.exports.getRandom = async ({ limit }) => {
   return await Category.findAll({
     attributes: attributes,
     limit: limit,

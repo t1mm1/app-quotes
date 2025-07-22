@@ -1,22 +1,22 @@
-const categoriesService = require('../services/categories');
+const service = require('../services/categories');
 
 /**
  * Controller to get all categories.
  *
  * @async
- * @function getAllCategories
- * @param {import('express').Request} request - Express request object (query: limit, offset, name)
- * @param {import('express').Response} response - Express response object
+ * @function getCategories
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /categories?limit=10&offset=0&name=books
  */
-module.exports.getAllCategories = async (request, response) => {
+module.exports.getCategories = async (request, response) => {
   const { limit = 5, offset = 0, name } = request.query;
 
   try {
-    const quotes = await categoriesService.findCategories({
+    const quotes = await service.getCategories({
       limit,
       offset,
       name,
@@ -33,19 +33,19 @@ module.exports.getAllCategories = async (request, response) => {
  * Controller to get category by its ID.
  *
  * @async
- * @function getCategoryById
- * @param {import('express').Request} request - Express request object (params: id)
- * @param {import('express').Response} response - Express response object
+ * @function getCategory
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /categories/10
  */
-module.exports.getCategoryById = async (request, response) => {
+module.exports.getCategory = async (request, response) => {
   const { id } = request.params;
 
   try {
-    const category = await categoriesService.findSingleCategory({ id });
+    const category = await service.getCategory({ id });
     if (category) {
       response.json(category);
     } else {
@@ -64,19 +64,19 @@ module.exports.getCategoryById = async (request, response) => {
  * Controller to get random categories.
  *
  * @async
- * @function getRandomCategories
- * @param {import('express').Request} request - Express request object (query: limit)
- * @param {import('express').Response} response - Express response object
+ * @function getRandom
+ * @param {import('express').Request} request
+ * @param {import('express').Response} response
  * @returns {Promise<void>}
  *
  * @example
  * // GET /categories/random?limit=3
  */
-module.exports.getRandomCategories = async (request, response) => {
+module.exports.getRandom = async (request, response) => {
   const { limit = 5 } = request.query;
 
   try {
-    const categories = await categoriesService.findRandomCategories({ limit });
+    const categories = await service.getRandom({ limit });
     response.json(categories);
   } catch (error) {
     response.status(500).json({

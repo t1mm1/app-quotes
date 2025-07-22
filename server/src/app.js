@@ -5,10 +5,16 @@
  */
 
 const express = require('express');
-const routeQuotes = require('./routes/quotes');
-const routeCategories = require('./routes/categories');
+const quotes = require('./routes/quotes');
+const categories = require('./routes/categories');
+const cors = require('./middlewares/cors');
 
 const app = express();
+
+/**
+ * Add cors policy.
+ */
+app.use(cors);
 
 /**
  * Parse incoming request bodies as JSON.
@@ -19,12 +25,12 @@ app.use(express.json());
  * Routes for quotes resources.
  * All routes under /quotes are handled by the quotes router.
  */
-app.use('/quotes', routeQuotes);
+app.use('/quotes', quotes);
 
 /**
  * Routes for categories resources.
  * All routes under /categories are handled by the categories router.
  */
-app.use('/categories', routeCategories);
+app.use('/categories', categories);
 
 module.exports = app;
