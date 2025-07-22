@@ -22,7 +22,13 @@ const includeCategoryConfig = {
  * @param {string} [category] - Filter by category name.
  * @returns {Promise<Array<Quote>>} List of quote instances.
  */
-module.exports.findQuotes = async (limit, offset, author, text, category) => {
+module.exports.findQuotes = async ({
+  limit,
+  offset,
+  author,
+  text,
+  category,
+}) => {
   const whereClause = {};
   author && (whereClause.author = { [Op.like]: `%${author}%` });
   text && (whereClause.text = { [Op.like]: `%${text}%` });
@@ -62,7 +68,7 @@ module.exports.findQuotes = async (limit, offset, author, text, category) => {
  * @param {number|string} id - The unique identifier of the quote.
  * @returns {Promise<Quote|null>} The quote instance or null if not found.
  */
-module.exports.findSingleQuote = async (id) => {
+module.exports.findSingleQuote = async ({ id }) => {
   return await Quote.findByPk(id, {
     attributes: attributes,
     include: includeCategoryConfig,
@@ -77,7 +83,7 @@ module.exports.findSingleQuote = async (id) => {
  * @param {number} limit - Maximum number of random quotes to retrieve.
  * @returns {Promise<Array<Quote>>} List of random quote instances.
  */
-module.exports.findRandomQuotes = async (limit) => {
+module.exports.findRandomQuotes = async ({ limit }) => {
   return await Quote.findAll({
     attributes: attributes,
     limit: limit,
@@ -115,5 +121,19 @@ module.exports.createQuote = async ({ text, author, categories }) => {
     return quote.id;
   });
 
-  return await this.findSingleQuote(id);
+  return await this.findSingleQuote({ id });
+};
+
+/**
+ * Delete a single quote by its unique ID.
+ *
+ * @async
+ * @function deleteQuote
+ * @param {number|string} id - The unique identifier of the quote.
+ */
+module.exports.deleteQuote = async ({ id }) => {
+  const count = await Quote.destroy({ where: { id } });
+  if (count) {
+    return id;
+  }
 };

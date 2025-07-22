@@ -16,7 +16,11 @@ module.exports.getAllCategories = async (request, response) => {
   const { limit = 5, offset = 0, name } = request.query;
 
   try {
-    const quotes = await categoriesService.findCategories(limit, offset, name);
+    const quotes = await categoriesService.findCategories({
+      limit,
+      offset,
+      name,
+    });
     response.json(quotes);
   } catch (error) {
     response.status(500).json({
@@ -41,7 +45,7 @@ module.exports.getCategoryById = async (request, response) => {
   const { id } = request.params;
 
   try {
-    const category = await categoriesService.findSingleCategory(id);
+    const category = await categoriesService.findSingleCategory({ id });
     if (category) {
       response.json(category);
     } else {
@@ -72,7 +76,7 @@ module.exports.getRandomCategories = async (request, response) => {
   const { limit = 5 } = request.query;
 
   try {
-    const categories = await categoriesService.findRandomCategories(limit);
+    const categories = await categoriesService.findRandomCategories({ limit });
     response.json(categories);
   } catch (error) {
     response.status(500).json({

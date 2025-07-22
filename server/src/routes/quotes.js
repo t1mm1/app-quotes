@@ -81,4 +81,22 @@ router.post(
   controller.postQuote
 );
 
+/**
+ * DELETE /quotes/:id
+ * Delete quote by ID.
+ *
+ * @name PostQuote
+ * @route {DELETE} /:id
+ * @middleware {Function} quoteValidators.getQuoteParamValidators - Validates route parameters
+ * @middleware {Function} validationErrorHandler.validationErrorHandler - Handles validation errors
+ * @param {string} id - Quote ID
+ * @handler {Function} controller.deleteQuote - Delete quote by ID
+ */
+router.delete(
+  '/:id',
+  quoteValidators.getQuoteParamValidators,
+  validationErrorHandler.validationErrorHandler,
+  controller.deleteQuote
+);
+
 module.exports = router;

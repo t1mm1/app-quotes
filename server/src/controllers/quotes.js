@@ -16,13 +16,13 @@ module.exports.getAllQuotes = async (request, response) => {
   const { limit = 5, offset = 0, author, text, category } = request.query;
 
   try {
-    const quotes = await quoteService.findQuotes(
+    const quotes = await quoteService.findQuotes({
       limit,
       offset,
       author,
       text,
-      category
-    );
+      category,
+    });
     response.json(quotes);
   } catch (error) {
     response.status(500).json({
@@ -47,7 +47,7 @@ module.exports.getQuoteById = async (request, response) => {
   const id = request.params.id;
 
   try {
-    const quote = await quoteService.findSingleQuote(id);
+    const quote = await quoteService.findSingleQuote({ id });
     if (quote) {
       response.json(quote);
     } else {
@@ -78,7 +78,7 @@ module.exports.getRandomQuotes = async (request, response) => {
   const { limit = 5 } = request.query;
 
   try {
-    const quotes = await quoteService.findRandomQuotes(limit);
+    const quotes = await quoteService.findRandomQuotes({ limit });
     response.json(quotes);
   } catch (error) {
     response.status(500).json({
@@ -106,6 +106,39 @@ module.exports.postQuote = async (request, response) => {
   try {
     const quote = await quoteService.createQuote({ text, author, categories });
     response.status(200).json(quote);
+  } catch (error) {
+    response.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+/**
+ * Controller to delete a quote by its ID.
+ *
+ * @async
+ * @function deleteQuote
+ * @param {import('express').Request} request - Express request object (params: id)
+ * @param {import('express').Response} response - Express response object
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // DELETE /quotes/23
+ */
+module.exports.deleteQuote = async (request, response) => {
+  const id = request.params.id;
+
+  try {
+    const deleted = await quoteService.deleteQuote({ id });
+    if (deleted) {
+      response.status(200).json({
+        message: `Quote with ID ${deleted} was deleted.`,
+      });
+    } else {
+      response.status(404).json({
+        message: `Quote with ID ${id} was not found.`,
+      });
+    }
   } catch (error) {
     response.status(500).json({
       message: error.message,
