@@ -275,27 +275,5 @@ This module is open-source and distributed under the [GPL-2.0-or-later](https://
 ## Feedback and Contributions
 
 If you have suggestions, find bugs, or want to contribute improvements, feel free to [text me on Drupal.org](https://www.drupal.org/u/pkasianov) or submit a pull request.  
+
 Your feedback and contributions are always welcome!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
