@@ -1,7 +1,33 @@
-require('dotenv').config();
-const app = require('./src/app');
-const port = process.env.PORT || 3000;
+/**
+ * Application entry point.
+ * Loads environment variables, initializes database, and starts the Express server.
+ */
 
-app.listen(port, () => {
-   console.log(`Server as started on ${port} port.`) 
-});
+require('dotenv').config();
+const sync = require('./src/config/init');
+const app = require('./src/app');
+
+/**
+ * Starts the application.
+ * - Initializes the database connection.
+ * - Starts the Express server on the specified port.
+ * - Handles errors during startup.
+ *
+ * @async
+ * @function start
+ * @returns {Promise<void>}
+ */
+const start = async () => {
+  try {
+    await sync.init();
+
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server was started on ${port} port.`);
+    });
+  } catch (error) {
+    console.error(`Unable to sync DB:`, error);
+  }
+};
+
+start();
