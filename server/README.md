@@ -88,12 +88,12 @@ npm install
 ````
     PORT = '3000'
     HOST = '0.0.0.0'
-    DB_DIALECT = 'postgres'
-    DB_NAME = 'db'
-    DB_HOST = 'localhost'
-    DB_USER = '*user name*'
-    DB_PASS = '*user password*'
-    DB_PORT = '5432'
+    POSTGRES_DIALECT = 'postgres'
+    POSTGRES_DB = 'db'
+    POSTGRES_HOST = 'localhost'
+    POSTGRES_USER = '*user name*'
+    POSTGRES_PASS = '*user password*'
+    POSTGRES_PORT = '5432'
 ````
 
 4. Start the services (API and PostgreSQL)

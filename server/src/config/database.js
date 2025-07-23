@@ -7,13 +7,13 @@ const { Sequelize } = require('sequelize');
  * @type {import('sequelize').Sequelize}
  */
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASS,
   {
-    dialect: process.env.DB_DIALECT,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    dialect: process.env.POSTGRES_DIALECT,
+    host: process.env.POSTGRES_HOST,
+    port: process.env.POSTGRES_PORT,
     logging: false,
   }
 );
