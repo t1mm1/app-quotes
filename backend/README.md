@@ -30,7 +30,7 @@ For development:
 ## Project Structure
 
 ```
-server/
+backend/
 ├── src/
 │   ├── config/
 │   │   ├── config.js
@@ -85,16 +85,6 @@ npm install
 
 3. Copy ```.env.sample``` to ```.env``` and fill in your database credentials
 
-````
-    PORT = '3001'
-    HOST = '0.0.0.0'
-    POSTGRES_DIALECT = 'postgres'
-    POSTGRES_DB = 'db'
-    POSTGRES_HOST = 'localhost'
-    POSTGRES_USER = '*user name*'
-    POSTGRES_PASS = '*user password*'
-    POSTGRES_PORT = '5432'
-````
 
 4. Start the services (API and PostgreSQL)
 

@@ -1,19 +1,19 @@
 # version: "3.8"
 
 services:
-  app:
+  backend:
     build: ./
     command: npm run dev
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       - postgres
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./:/usr/src/backend
+      - /usr/src/backend/node_modules
     environment:
-      - APP_PORT=${APP_PORT}
-      - APP_HOST=${APP_HOST}
+      - BACKEND_PORT=${BACKEND_PORT}
+      - BACKEND_HOST=${BACKEND_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASS=${POSTGRES_PASS}
       - POSTGRES_DB=${POSTGRES_DB}

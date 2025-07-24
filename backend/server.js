@@ -21,8 +21,8 @@ const start = async () => {
   try {
     await sync.init();
 
-    const port = process.env.APP_PORT || 3001;
-    const host = process.env.APP_HOST || '0.0.0.0';
+    const port = process.env.BACKEND_PORT || 3001;
+    const host = process.env.BACKEND_HOST || '0.0.0.0';
     app.listen(port, host, () => {
       console.log(`Server was started on ${port} port.`);
     });

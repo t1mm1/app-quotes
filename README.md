@@ -3,7 +3,7 @@
 This is the APP of the quotes application, built with Node.js and Express.
 
 Backend: see details in readme.md file inside ```server``` folder.
-Frontend: comming soon.
+Client: comming soon.
 
 ---
 
