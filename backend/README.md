@@ -1,4 +1,4 @@
-# Quotes DB Server
+# Quotes DB backend
 
 This is the backend of the quotes application, built with Node.js and Express. It provides a RESTful API for managing quotes and categories, with PostgreSQL as the database. All responses are in JSON format. The project is designed for easy local development and supports high-volume quote imports.
 
@@ -103,17 +103,17 @@ npm install
 ## Development
 
 - Use nodemon for auto-restart during development.
-- The main application file is at ```server/src/app.js```.
+- The main application file is at ```backend/src/app.js```.
 - Import quotes via
 
 ````
-    node server/src/database/seed/importQuotes.js
+    node backend/src/database/seed/importQuotes.js
 ````
 
 - After import you can optionally remove categories with ≤2 quotes
 
 ````
-    node server/src/database/seed/removeCategories.js
+    node backend/src/database/seed/removeCategories.js
 ````
 
 **Note** Quote-category relations and keys are auto-managed by the script.
@@ -195,19 +195,19 @@ Route ```/categories```
 
 # Validation Middleware
 
-- ```/server/src/middlewares/quote.js```
-- ```/server/src/middlewares/category.js```
-- ```/src/middlewares/handler.js```
-- ```/server/src/middlewares/cors.js```
+- ```/backend/src/middlewares/quote.js```
+- ```/backend/src/middlewares/category.js```
+- ```/backend/src/middlewares/handler.js```
+- ```/backend/src/middlewares/cors.js```
 
 # Controllers
 
-```server/src/controllers/categories.js```
+```backend/src/controllers/categories.js```
 - getCategories
 - getCategory
 - getRandom
 
-```server/src/controllers/quotes.js``` 
+```backend/src/controllers/quotes.js``` 
 - getQuotes
 - getQuote
 - getRandom
@@ -217,14 +217,14 @@ Route ```/categories```
 
 # Services
 
-- Quotes ```/server/src/services/quote.js```
+- Quotes ```/backend/src/services/quote.js```
   - ```getQuotes```
   - ```getQuotegetRandom```
   - ```createQuote```
   - ```deleteQuote```
   - ```editQuote```
   - Helper ```createCategories```
-- Categories ```/server/src/services/categories.js```
+- Categories ```/backend/src/services/categories.js```
   - ```getCategories```
   - ```getCategory```
   - ```getRandom```

@@ -2,8 +2,8 @@
 
 This is the APP of the quotes application, built with Node.js and Express.
 
-Backend: see details in readme.md file inside ```server``` folder.
-Client: comming soon.
+Backend: see details in readme.md file inside ```backend``` folder.
+Frontend: see details in readme.md file inside ```backend``` folder.
 
 ---
 
