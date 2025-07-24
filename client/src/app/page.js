@@ -10,9 +10,7 @@ export default function Page() {
 
   const fetchQuotes = async (e) => {
     e.preventDefault();
-    const responce = await fetch(
-      'http://localhost:3000/quotes/random?limit=12'
-    );
+    const responce = await fetch('http://0.0.0.0:3001/quotes/random?limit=20');
     const data = await responce.json();
     setQuotes(data);
     doScroll.current = true;
