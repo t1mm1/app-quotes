@@ -1,39 +1,40 @@
 # version: "3.8"
 
 services:
-    app:
-        build: ./
-        command: npm run dev
-        ports:
-        - "${APP_PORT}:${APP_PORT}"
-        depends_on:
-        - postgres
-        volumes:
-        - ./:/usr/src/app
-        environment:
-        - APP_PORT=${APP_PORT}
-        - APP_HOST=${APP_HOST}
-        - POSTGRES_USER=${POSTGRES_USER}
-        - POSTGRES_PASS=${POSTGRES_PASS}
-        - POSTGRES_DB=${POSTGRES_DB}
-        - POSTGRES_HOST=${POSTGRES_HOST}
-        - POSTGRES_PORT=${POSTGRES_PORT}
-    postgres:
-        image: postgres:latest
-        restart: always
-        environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASS}
-            POSTGRES_DB: ${POSTGRES_DB}
-        ports:
-            - '5432:5432'
-        volumes:
-            - pgdata:/var/lib/postgresql/data
+  app:
+    build: ./
+    command: npm run dev
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - APP_PORT=${APP_PORT}
+      - APP_HOST=${APP_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
-    adminer:
-        image: adminer:latest
-        restart: always
-        ports:
-            - '8080:8080'
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - '8080:8080'
 volumes:
     pgdata:

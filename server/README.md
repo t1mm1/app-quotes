@@ -86,7 +86,7 @@ npm install
 3. Copy ```.env.sample``` to ```.env``` and fill in your database credentials
 
 ````
-    PORT = '3000'
+    PORT = '3001'
     HOST = '0.0.0.0'
     POSTGRES_DIALECT = 'postgres'
     POSTGRES_DB = 'db'
