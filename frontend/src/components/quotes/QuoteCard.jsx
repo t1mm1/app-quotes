@@ -7,7 +7,7 @@ export default function QuoteCard({ quote }) {
   return (
     <div
       className={
-        `area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5]` +
+        `area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200` +
         (
           isLong
             ? ` cursor-pointer after:content-["*"] after:absolute after:right-2 after:top-2 after:text-sm after:text-gray-400`
