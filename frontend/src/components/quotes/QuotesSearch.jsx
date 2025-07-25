@@ -1,20 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-
 import QuotesGrid from '@/components/quotes/QuotesGrid';
 
-export default function Search() {
+export default function QuotesSearch() {
   const [text, setText] = useState('');
   const [error, setError] = useState("");
   const [quotes, setQuotes] = useState([]);
+  const [searchSubmitted, setSearchSubmitted] = useState(false);
 
   const createSearchQueryString = ({ text }) => {
     const params = new URLSearchParams();
     if (text) {
       params.append('text', text);
     }
-    params.append('limit', 27);
+    params.append('limit', 18);
 
     return params.toString();
   };
@@ -26,12 +26,16 @@ export default function Search() {
 
     if (text.length < 4) {
       setError("Type minimun 4 charasters for search");
+      setQuotes([]);
+      setSearchSubmitted(false);
       return;
     }
     setError("");
 
     try {
       if (text.length > 2) {
+        setSearchSubmitted(true);
+
         const query = createSearchQueryString({ text });
         const response = await fetch(`http://localhost:3001/quotes?${query}`);
         const data = await response.json();
@@ -44,9 +48,9 @@ export default function Search() {
   };
 
   return (
-    <>
-      <div className="p-4 flex justify-center">
-        <form className="w-full max-w-3xl" onSubmit={(e) => handleSearch(e)}>
+    <div className='area-quotes-search'>
+      <div className="p-4 pb-4 flex justify-center">
+        <form className="relative w-full max-w-3xl" onSubmit={(e) => handleSearch(e)}>
           <div className="flex items-center border border-gray-300 rounded overflow-hidden bg-white shadow-sm dark:bg-gray-800 dark:border-gray-600">
             <input
               type="text"
@@ -63,12 +67,27 @@ export default function Search() {
             </button>
           </div>
           {error && (
-            <div className="mt-2 text-center text-sm text-red-600 opacity-70">{error}</div>
+            <div className="absolute mt-2 w-full text-center text-sm text-red-600">{error}</div>
           )}
         </form>
       </div>
 
-      <QuotesGrid quotes={quotes} />
-    </>
+      {quotes && quotes.length > 0 ? (
+        <QuotesGrid quotes={quotes} />
+      ) : (
+        <>
+          {searchSubmitted ? (
+            <div className="w-full flex justify-center items-center p-4">
+              <div className="text-gray-500 text-lg">Quotes wasn't found</div>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center p-4 pb-0">
+              <div className="text-gray-500 text-lg">Make search for the Quotes</div>
+            </div>
+          )}
+        </>
+      )}
+      
+    </div>
   );
 }

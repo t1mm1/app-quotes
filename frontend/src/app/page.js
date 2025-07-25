@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/navigation/Navbar';
 import Welcome from '@/components/common/Welcome';
-import Search from '@/components/search/Search';
+import QuotesSearch from '@/components/quotes/QuotesSearch';
 
 export default function Page() {
   return (
@@ -10,7 +10,7 @@ export default function Page() {
       <div className="bg-white">
         <Navbar />
         <Welcome />
-        <Search />
+        <QuotesSearch />
       </div>
     </>
   );

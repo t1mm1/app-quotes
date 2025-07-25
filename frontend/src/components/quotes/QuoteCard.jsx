@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function QuoteCard({ quote }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = quote.text.length > 120;
+
   return (
     <div
-      className="p-4 border-1 border-gray-100 rounded-sm bg-[#fbfbfb]
-        hover:bg-[#f5f5f5]
-        transition-colors
-        duration-200"
+      className={
+        `area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5]` +
+        (
+          isLong
+            ? ` cursor-pointer after:content-["*"] after:absolute after:right-2 after:top-2 after:text-sm after:text-gray-400`
+            : ""
+        )
+      }
+      onClick={() => setExpanded((e) => !e)}
+      tabIndex={0}
+      role="button"
+      aria-expanded={expanded}
     >
-      <p className="mb-4 text-lg">{quote.text}</p>
-      <p className="text-left text-sm">{quote.author}</p>
+      <div className={`text-lg transition-all ${expanded ? "" : "line-clamp-3"}`}>
+        {quote.text}
+      </div>
+      <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
       <div className="flex flex-wrap mt-2">
         {quote.categories.map((category) => (
           <span
