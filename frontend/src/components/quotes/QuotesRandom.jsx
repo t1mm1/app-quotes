@@ -26,7 +26,7 @@ export default function QuotesRandom() {
           onClick={fetchQuotes}
           className="rounded-md px-3.5 py-2.5 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition"
         >
-          Get random qutes
+          Click to discover a random quotes
         </a>
       </div>
 
