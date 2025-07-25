@@ -6,6 +6,7 @@ import QuotesGrid from '@/components/quotes/QuotesGrid';
 export default function QuotesSearch() {
   const [text, setText] = useState('');
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
   const [quotes, setQuotes] = useState([]);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
 
@@ -24,7 +25,7 @@ export default function QuotesSearch() {
       e.preventDefault();
     }
 
-    if (text.length < 4) {
+    if (text.length < 3) {
       setError("Type minimun 4 charasters for search");
       setQuotes([]);
       setSearchSubmitted(false);
@@ -33,12 +34,13 @@ export default function QuotesSearch() {
     setError("");
 
     try {
-      if (text.length > 2) {
+      if (text.length >= 3) {
         setSearchSubmitted(true);
 
         const query = createSearchQueryString({ text });
         const response = await fetch(`http://localhost:3001/quotes?${query}`);
         const data = await response.json();
+        setQuery(query);
         setQuotes(data);
       }
     } 
@@ -73,7 +75,7 @@ export default function QuotesSearch() {
       </div>
 
       {quotes && quotes.length > 0 ? (
-        <QuotesGrid quotes={quotes} />
+        <QuotesGrid quotes={quotes} query={query} />
       ) : (
         <>
           {searchSubmitted ? (
