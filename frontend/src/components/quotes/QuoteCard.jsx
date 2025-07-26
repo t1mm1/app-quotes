@@ -56,14 +56,16 @@ export default function QuoteCard({ quote, query }) {
         {highlightMatches({query: query, text: quote.text})}
       </div>
       {clamped && (
-        <button
-          className="text-blue-600 hover:underline text-sm cursor-pointer"
-          onClick={() => setExpanded(exp => !exp)}
-          aria-label={expanded ? "Hide..." : "Read more..."}
-          tabIndex={-1}
-        >
-          {expanded ? "Hide..." : "Read more..."}
-        </button>
+        <div className="mt-1 mb-2">
+          <button
+            className="text-blue-600 hover:underline text-sm cursor-pointer"
+            onClick={() => setExpanded(exp => !exp)}
+            aria-label={expanded ? "Hide" : "Read more"}
+            tabIndex={-1}
+          >
+            {expanded ? "Hide ↑" : "Read more ↓"}
+          </button>
+        </div>
       )}
       <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
       <div className="flex flex-wrap mt-2">
