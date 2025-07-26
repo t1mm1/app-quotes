@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export default function QuoteCard({ quote, query }) {
   const [expanded, setExpanded] = useState(false);
-  const isLong = quote.text.length > 120;
+  const [clamped, setClamped] = useState(false);
+  const textRef = useRef(null);
 
   function getQueryParam({query, param}) {
     const params = new URLSearchParams(query);
@@ -30,24 +31,40 @@ export default function QuoteCard({ quote, query }) {
     );
   }
 
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+      const maxHeight = lineHeight * 3;
+      // Проверяем на clamped всегда!
+      setClamped(el.scrollHeight > maxHeight + 2);
+    }
+  }, [quote.text, query]);
+
   return (
     <div
-      className={
-        `area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200` +
-        (
-          isLong
-            ? ` cursor-pointer after:content-["*"] after:absolute after:right-2 after:top-2 after:text-sm after:text-gray-400`
-            : ""
-        )
-      }
-      onClick={() => setExpanded((e) => !e)}
+      className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200"
       tabIndex={0}
       role="button"
       aria-expanded={expanded}
     >
-      <div className={`text-lg transition-all ${expanded ? "" : "line-clamp-3"}`}>
+      <div
+        ref={textRef}
+        className={`text-lg transition-all ${expanded ? "" : "line-clamp-3"}`}
+        style={{overflowWrap: 'anywhere'}}
+      >
         {highlightMatches({query: query, text: quote.text})}
       </div>
+      {clamped && (
+        <button
+          className="text-blue-600 hover:underline text-sm cursor-pointer"
+          onClick={() => setExpanded(exp => !exp)}
+          aria-label={expanded ? "Hide..." : "Read more..."}
+          tabIndex={-1}
+        >
+          {expanded ? "Hide..." : "Read more..."}
+        </button>
+      )}
       <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
       <div className="flex flex-wrap mt-2">
         {quote.categories.map((category) => (
