@@ -26,7 +26,7 @@ export default function QuotesSearch() {
     }
 
     if (text.length < 3) {
-      setError("Type minimun 4 charasters for search");
+      setError("Type minimun 3 charasters for search");
       setQuotes([]);
       setSearchSubmitted(false);
       return;
@@ -74,22 +74,21 @@ export default function QuotesSearch() {
         </form>
       </div>
 
-      {quotes && quotes.length > 0 ? (
-        <QuotesGrid quotes={quotes} query={query} />
-      ) : (
+      {searchSubmitted ? (
         <>
-          {searchSubmitted ? (
+          {quotes && quotes.length ? (
+            <QuotesGrid quotes={quotes} query={query} />  
+          ) : (
             <div className="w-full flex justify-center items-center p-4">
               <div className="text-gray-500 text-lg">Quotes wasn't found</div>
             </div>
-          ) : (
-            <div className="w-full flex justify-center items-center p-4 pb-0">
-              <div className="text-gray-500 text-lg">Make search for the Quotes</div>
-            </div>
           )}
         </>
+      ) : (
+        <div className="w-full flex justify-center items-center p-4 pb-0">
+          <div className="text-gray-500 text-lg">Make search for the Quotes</div>
+        </div>
       )}
-      
     </div>
   );
 }
