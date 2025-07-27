@@ -1,24 +1,25 @@
 'use client';
 
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import QuotesGrid from '@/components/quotes/QuotesGrid';
+
+const createSearchQueryString = ({ text }) => {
+  const params = new URLSearchParams();
+  if (text) {
+    params.append('text', text);
+  }
+  params.append('limit', 18);
+
+  return params.toString();
+};
 
 export default function QuotesSearch() {
   const [text, setText] = useState('');
-  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [quotes, setQuotes] = useState([]);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
-
-  const createSearchQueryString = ({ text }) => {
-    const params = new URLSearchParams();
-    if (text) {
-      params.append('text', text);
-    }
-    params.append('limit', 18);
-
-    return params.toString();
-  };
+  const [error, setError] = useState("");
 
   const handleSearch = async (e) => {
     if (e) {
@@ -26,12 +27,14 @@ export default function QuotesSearch() {
     }
 
     if (text.length < 3) {
-      setError("Type minimun 3 charasters for search");
+      const error = "Type minimun 3 charasters for search";
+      setError(error);
+      toast.error(error);
       setQuotes([]);
       setSearchSubmitted(false);
       return;
     }
-    setError("");
+    setError('');
 
     try {
       if (text.length >= 3) {
@@ -40,12 +43,13 @@ export default function QuotesSearch() {
         const query = createSearchQueryString({ text });
         const response = await fetch(`http://localhost:3001/quotes?${query}`);
         const data = await response.json();
+
         setQuery(query);
         setQuotes(data);
       }
     } 
     catch (error) {
-      console.error('Error fetching quotes:', error);
+      toast.error(error);
     }
   };
 
@@ -55,11 +59,14 @@ export default function QuotesSearch() {
         <form className="relative w-full max-w-3xl" onSubmit={(e) => handleSearch(e)}>
           <div className="flex items-center border border-gray-300 rounded overflow-hidden bg-white shadow-sm dark:bg-gray-800 dark:border-gray-600">
             <input
+              id="text"
               type="text"
               placeholder="Search quotes"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white"
+              className={
+                `flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white ${error ? ' text-red-500' : ''}`
+              }
             />
             <button
               type="submit"
@@ -67,10 +74,15 @@ export default function QuotesSearch() {
             >
               Search
             </button>
+            <ToastContainer 
+              className="centered-toast-container"
+              toastClassName="centered-toast"
+
+              hideProgressBar={false}
+              closeOnClick
+              draggable
+            />
           </div>
-          {error && (
-            <div className="absolute mt-2 w-full text-center text-sm text-red-600">{error}</div>
-          )}
         </form>
       </div>
 

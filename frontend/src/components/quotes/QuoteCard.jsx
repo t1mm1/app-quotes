@@ -60,10 +60,10 @@ export default function QuoteCard({ quote, query }) {
           <button
             className="text-blue-600 hover:underline text-sm cursor-pointer"
             onClick={() => setExpanded(exp => !exp)}
-            aria-label={expanded ? "Hide" : "Read more"}
+            aria-label={expanded ? "hide" : "more"}
             tabIndex={-1}
           >
-            {expanded ? "Hide ↑" : "Read more ↓"}
+            {expanded ? "hide ↑" : "more ↓"}
           </button>
         </div>
       )}
