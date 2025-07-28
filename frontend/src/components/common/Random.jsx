@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Random() {
   return (
-    <div className='area-random'>
+    <div className="area-random">
       <div className="relative px-6 pt-14 pb-4 lg:px-8">
         <div className="mx-auto max-w-2xl">
           <div className="text-center">
@@ -10,8 +10,8 @@ export default function Random() {
               Random Quotes
             </h1>
             <p className="mt-8 font-medium text-pretty text-gray-500">
-              Get random quotes form collection of over 500,000 quotes, ranging from
-              ancient philosophers to world-renowned authors and thinkers.
+              Get random quotes form collection of over 500,000 quotes, ranging
+              from ancient philosophers to world-renowned authors and thinkers.
             </p>
           </div>
         </div>

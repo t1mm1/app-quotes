@@ -9,7 +9,7 @@ export default function Search({ handle, set }) {
           type="text"
           placeholder="Search quotes"
           onChange={(e) => set(e.target.value)}
-          className='flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white}'
+          className="flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white}"
         />
         <button
           type="submit"

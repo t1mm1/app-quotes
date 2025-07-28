@@ -16,7 +16,9 @@ export default function Random() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_RANDOM}?limit=12`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_RANDOM}?limit=12`
+      );
       if (!response.ok) {
         const errors = await response.json();
         if (!errors.errors) {
@@ -24,11 +26,11 @@ export default function Random() {
         }
 
         const messages = errors.errors
-          .filter(err => err.type === 'field')
-          .map(err => `${err.msg} (${err.path} ${err.value})`);
+          .filter((err) => err.type === 'field')
+          .map((err) => `${err.msg} (${err.path} ${err.value})`);
 
         if (messages) {
-          messages.forEach(message => {
+          messages.forEach((message) => {
             toast.error(message);
           });
         }
@@ -38,8 +40,7 @@ export default function Random() {
 
       const data = await response.json();
       setQuotes(data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error: ', error);
       toast.error(error.msg);
     }
@@ -50,7 +51,7 @@ export default function Random() {
   }, []);
 
   return (
-    <div className='area-quotes-random'>
+    <div className="area-quotes-random">
       <div className="flex pt-4 pb-4 items-center justify-center gap-x-6">
         <a
           href="#"

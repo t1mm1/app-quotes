@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
@@ -8,19 +8,22 @@ export default function ({ quote, query }) {
   const [clamped, setClamped] = useState(false);
   const textRef = useRef(null);
 
-  function getQueryParam({query, param}) {
+  function getQueryParam({ query, param }) {
     const params = new URLSearchParams(query);
     return params.get(param) || '';
   }
 
-  function highlightMatches({query, text}) {
+  function highlightMatches({ query, text }) {
     if (!query) {
       return text;
     }
 
-    const highlight = getQueryParam({query: query, param: 'text'});
+    const highlight = getQueryParam({ query: query, param: 'text' });
 
-    const regex = new RegExp(`(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, "gi");
+    const regex = new RegExp(
+      `(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+      'gi'
+    );
     const parts = text.split(regex);
 
     return parts.map((part, i) =>
@@ -44,29 +47,23 @@ export default function ({ quote, query }) {
   }, [quote.text, query]);
 
   return (
-    <div
-      className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200"
-    >
+    <div className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200">
       <div
         ref={textRef}
-        className={`text-sm transition-all ${expanded ? "" : "line-clamp-3"}`}
-        style={{overflowWrap: 'anywhere'}}
+        className={`text-sm transition-all ${expanded ? '' : 'line-clamp-3'}`}
+        style={{ overflowWrap: 'anywhere' }}
       >
-        {highlightMatches({query: query, text: quote.text})}
+        {highlightMatches({ query: query, text: quote.text })}
       </div>
       <div className="mt-1 mb-2">
         {clamped && (
           <button
             className="text-blue-600 hover:underline text-sm cursor-pointer mr-2"
-            onClick={() => setExpanded(exp => !exp)}
-            aria-label={expanded ? "hide" : "more"}
+            onClick={() => setExpanded((exp) => !exp)}
+            aria-label={expanded ? 'hide' : 'more'}
             tabIndex={-1}
           >
-            {expanded ? (
-              <span>hide &uarr;</span>
-            ) : (
-              <span>more &darr;</span>
-            )}
+            {expanded ? <span>hide &uarr;</span> : <span>more &darr;</span>}
           </button>
         )}
         <Link

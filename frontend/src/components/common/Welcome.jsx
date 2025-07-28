@@ -3,7 +3,7 @@ import React from 'react';
 export default function Welcome() {
   return (
     <>
-      <div className='area-welcome'>
+      <div className="area-welcome">
         <div className="relative px-6 pt-14 pb-4 lg:px-8">
           <div className="mx-auto max-w-2xl">
             <div className="text-center">
@@ -13,12 +13,11 @@ export default function Welcome() {
               <p className="mt-8 font-medium text-pretty text-gray-500">
                 Discover a vast collection of over 500,000 quotes, ranging from
                 ancient philosophers to world-renowned authors and thinkers. Our
-                service offers you daily inspiration, wisdom, and motivation, making
-                it easy to find the right words for any situation. Whether you’re
-                searching for guidance, reflection, or a spark of creativity, you’ll
-                find quotes to suit every mood and need.
+                service offers you daily inspiration, wisdom, and motivation,
+                making it easy to find the right words for any situation.
+                Whether you’re searching for guidance, reflection, or a spark of
+                creativity, you’ll find quotes to suit every mood and need.
               </p>
-              
             </div>
           </div>
         </div>

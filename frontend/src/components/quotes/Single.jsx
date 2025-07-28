@@ -8,9 +8,20 @@ export default function Single({ id }) {
   const URL_QUOTES_QUOTE = 'quotes';
   const [quote, setQuote] = useState(null);
 
+  const isValidId = (id) => {
+    return id > 0 ? true : false;
+  };
+
   const fetchQuote = async () => {
+    if (!isValidId(id)) {
+      toast.error(`Invalid quote ID. ID must be an integer greated than 0`);
+      return;
+    }
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_QUOTE}/${id}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_QUOTE}/${id}`
+      );
 
       if (!response.ok) {
         const errors = await response.json();
@@ -26,11 +37,11 @@ export default function Single({ id }) {
         }
 
         const messages = errors.errors
-          .filter(err => err.type === 'field')
-          .map(err => `${err.msg} (${err.path} ${err.value})`);
+          .filter((err) => err.type === 'field')
+          .map((err) => `${err.msg} (${err.path} ${err.value})`);
 
         if (messages) {
-          messages.forEach(message => {
+          messages.forEach((message) => {
             toast.error(message);
           });
         }
@@ -40,24 +51,24 @@ export default function Single({ id }) {
 
       const quote = await response.json();
       setQuote(quote);
-    }
-    catch (error) {
+    } catch (error) {
       toast.error(error.message);
       console.error('Error:', error);
     }
-  }
-  
+  };
+
   useEffect(() => {
     fetchQuote();
   }, []);
 
   return (
-    <div className="area-quotes-grid p-4 max-w-7xl w-full mx-auto sm:px-6 lg:px-8" id="quotes">
+    <div
+      className="area-quotes-grid p-4 max-w-7xl w-full mx-auto sm:px-6 lg:px-8"
+      id="quotes"
+    >
       <div className="grid grid-cols-1 gap-6">
-        <div
-          className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb]"
-        >
-          <div className='mb-2'>
+        <div className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb]">
+          <div className="mb-2">
             <Link
               href={`/random`}
               className="text-blue-600 hover:underline text-sm cursor-pointer"
@@ -65,24 +76,25 @@ export default function Single({ id }) {
               tabIndex={0}
               aria-label="Go gome"
               passHref
-            ><span className="relative -top-0.5">&larr;</span> back</Link>
+            >
+              <span className="relative -top-0.5">&larr;</span> back
+            </Link>
           </div>
           {quote && (
             <>
-              <div className={`text-sm`}>
-                {quote.text}
-              </div>
+              <div className={`text-sm`}>{quote.text}</div>
               <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
               <div className="flex flex-wrap mt-2">
-                {quote.categories && quote.categories.map((category) => (
-                  <span
-                    key={category}
-                    title={`Category: ${category}`}
-                    className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-default"
-                  >
-                    {category}
-                  </span>
-                ))}
+                {quote.categories &&
+                  quote.categories.map((category) => (
+                    <span
+                      key={category}
+                      title={`Category: ${category}`}
+                      className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-default"
+                    >
+                      {category}
+                    </span>
+                  ))}
               </div>
             </>
           )}
