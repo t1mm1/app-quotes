@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import QuotesGrid from '@/components/quotes/QuotesGrid';
 
+const URL_QUOTES_RANDOM = 'quotes/random';
+
 export default function QuotesRandom() {
   const [quotes, setQuotes] = useState([]);
 
@@ -13,7 +15,7 @@ export default function QuotesRandom() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/quotes/random?limit=12');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_RANDOM}?limit=12`);
       if (!response.ok) {
         const errors = await response.json();
         if (!errors.errors) {
