@@ -1,8 +1,9 @@
 'use client';
 
 import Navbar from '@/components/navigation/Navbar';
+import Quotes from '@/components/quotes/Random';
 import Random from '@/components/common/Random';
-import QuotesRandom from '@/components/quotes/QuotesRandom';
+
 
 export default function Page() {
   return (
@@ -10,7 +11,7 @@ export default function Page() {
       <div className="bg-white">
         <Navbar />
         <Random />
-        <QuotesRandom />
+        <Quotes />
       </div>
     </>
   );

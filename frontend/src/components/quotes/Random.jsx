@@ -2,11 +2,11 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QuotesGrid from '@/components/quotes/QuotesGrid';
+import QuotesGrid from '@/components/quotes/Quotes';
 
 const URL_QUOTES_RANDOM = 'quotes/random';
 
-export default function QuotesRandom() {
+export default function Random() {
   const [quotes, setQuotes] = useState([]);
 
   const fetchQuotes = async (e) => {

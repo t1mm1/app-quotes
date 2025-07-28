@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SearchForm from '@/components/form/SearchForm';
-import QuotesGrid from '@/components/quotes/QuotesGrid';
+import Form from '@/components/form/Search';
+import QuotesGrid from '@/components/quotes/Quotes';
 
 const URL_QUOTES_SEARCH = 'quotes';
 
@@ -18,7 +18,7 @@ const queryString = ({ text }) => {
   return params.toString();
 };
 
-export default function QuotesSearch() {
+export default function Search() {
   const [text, setText] = useState('');
   const [query, setQuery] = useState("");
   const [quotes, setQuotes] = useState([]);
@@ -79,7 +79,7 @@ export default function QuotesSearch() {
   return (
     <div className='area-quotes-search'>
       <div className="p-4 pb-4 flex justify-center">
-        <SearchForm handle={handle} set={setText} />
+        <Form handle={handle} set={setText} />
         <ToastContainer 
           position="bottom-center"
           autoClose={3000}

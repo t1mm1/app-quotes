@@ -1,6 +1,6 @@
 'use client';
 
-export default function SearchForm({ handle, set }) {
+export default function Search({ handle, set }) {
   return (
     <form className="relative w-full max-w-3xl" onSubmit={(e) => handle(e)}>
       <div className="flex items-center border border-gray-300 rounded overflow-hidden bg-white shadow-sm dark:bg-gray-800 dark:border-gray-600">

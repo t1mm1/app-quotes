@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function QuoteCard({ quote, query }) {
+export default function ({ quote, query }) {
   const [expanded, setExpanded] = useState(false);
   const [clamped, setClamped] = useState(false);
   const textRef = useRef(null);
