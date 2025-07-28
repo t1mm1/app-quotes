@@ -14,8 +14,14 @@ export default function Single({ id }) {
 
       if (!response.ok) {
         const errors = await response.json();
+
+        if (response.status === 404) {
+          toast.error(`Quote with ID ${id} was not found.`);
+          return;
+        }
+
         if (!errors.errors || !Array.isArray(errors.errors)) {
-          toast.error('An error occurred, please, check your input.');
+          toast.error(`An error occurred, please, check your input.`);
           return;
         }
 
@@ -61,7 +67,7 @@ export default function Single({ id }) {
               passHref
             ><span className="relative -top-0.5">&larr;</span> back</Link>
           </div>
-          {quote ? (
+          {quote && (
             <>
               <div className={`text-sm`}>
                 {quote.text}
@@ -79,10 +85,6 @@ export default function Single({ id }) {
                 ))}
               </div>
             </>
-          ) : (
-            <div className={`text-sm`}>
-              {`Quote with ID ${id} was not found.`}
-            </div>
           )}
         </div>
       </div>

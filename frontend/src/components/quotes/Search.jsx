@@ -31,7 +31,7 @@ export default function Search() {
     if (text.length < 3) {
       setSubmitted(false);
 
-      toast.error("Type minimun 3 charasters for search");
+      toast.error(`Please enter at least 3 characters to search.`);
       return;
     }
 
@@ -43,7 +43,7 @@ export default function Search() {
       if (!response.ok) {
         const errors = await response.json();
         if (!errors.errors || !Array.isArray(errors.errors)) {
-          toast.error('An error occurred, please, check your input.');
+          toast.error(`An error occurred, please, check your input.`);
           return;
         }
 
@@ -66,7 +66,7 @@ export default function Search() {
       setQuotes(data);
 
       if (data.length == 0) {
-        toast.error("Quotes wasn't found");
+        toast.error(`No quotes were found. Please try another keyword.`);
       }
     } 
     catch (error) {

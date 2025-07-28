@@ -20,7 +20,7 @@ export default function Random() {
       if (!response.ok) {
         const errors = await response.json();
         if (!errors.errors) {
-          toast.error('An error occurred, please, check your input.');
+          toast.error(`An error occurred, please, check your input.`);
         }
 
         const messages = errors.errors
