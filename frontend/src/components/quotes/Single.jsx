@@ -2,28 +2,48 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Single({ id }) {
   const URL_QUOTES_QUOTE = 'quotes';
   const [quote, setQuote] = useState(null);
+
+  const fetchQuote = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_QUOTE}/${id}`);
+
+      if (!response.ok) {
+        const errors = await response.json();
+        if (!errors.errors || !Array.isArray(errors.errors)) {
+          toast.error('An error occurred, please, check your input.');
+          return;
+        }
+
+        const messages = errors.errors
+          .filter(err => err.type === 'field')
+          .map(err => `${err.msg} (${err.path} ${err.value})`);
+
+        if (messages) {
+          messages.forEach(message => {
+            toast.error(message);
+          });
+        }
+
+        return;
+      }
+
+      const quote = await response.json();
+      setQuote(quote);
+    }
+    catch (error) {
+      toast.error(error.message);
+      console.error('Error:', error);
+    }
+  }
   
   useEffect(() => {
-    if (id) {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_QUOTE}/${id}`;
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Quote not found");
-          }
-          return response.json();
-        })
-        .then((quote) => setQuote(quote))
-        .catch((error) => {
-          setQuote(null); // можно отобразить ошибку пользователю
-          console.error('Error:', error);
-        });
-    }
-  }, [id]);
+    fetchQuote();
+  }, []);
 
   return (
     <div className="area-quotes-grid p-4 max-w-7xl w-full mx-auto sm:px-6 lg:px-8" id="quotes">
@@ -31,10 +51,10 @@ export default function Single({ id }) {
         <div
           className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb]"
         >
-          <div className='mb-4'>
+          <div className='mb-2'>
             <Link
               href={`/random`}
-              className="pb-1 text-blue-600 hover:underline text-sm cursor-pointer"
+              className="text-blue-600 hover:underline text-sm cursor-pointer"
               title="Open"
               tabIndex={0}
               aria-label="Go gome"
@@ -48,7 +68,7 @@ export default function Single({ id }) {
               </div>
               <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
               <div className="flex flex-wrap mt-2">
-                {quote.categories.map((category) => (
+                {quote.categories && quote.categories.map((category) => (
                   <span
                     key={category}
                     title={`Category: ${category}`}
@@ -60,8 +80,8 @@ export default function Single({ id }) {
               </div>
             </>
           ) : (
-            <div className='text-sm'>
-              Loading...
+            <div className={`text-sm`}>
+              {`Quote with ID ${id} was not found.`}
             </div>
           )}
         </div>

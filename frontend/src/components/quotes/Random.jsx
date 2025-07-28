@@ -29,7 +29,7 @@ export default function Random() {
 
         if (messages) {
           messages.forEach(message => {
-            toast.error(message);  
+            toast.error(message);
           });
         }
 
