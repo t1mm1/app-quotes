@@ -63,7 +63,7 @@ export default function Single({ id }) {
 
   return (
     <div
-      className="area-quotes-grid p-4 max-w-7xl w-full mx-auto sm:px-6 lg:px-8"
+      className="area-quotes-grid p-4 max-w-4xl w-full mx-auto sm:px-6 lg:px-8"
       id="quotes"
     >
       <div className="grid grid-cols-1 gap-6">
