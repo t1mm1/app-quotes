@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QuotesGrid from '@/components/quotes/QuotesGrid';
 
 const createSearchQueryString = ({ text }) => {
@@ -19,7 +20,6 @@ export default function QuotesSearch() {
   const [query, setQuery] = useState("");
   const [quotes, setQuotes] = useState([]);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSearch = async (e) => {
     if (e) {
@@ -27,29 +27,48 @@ export default function QuotesSearch() {
     }
 
     if (text.length < 3) {
-      const error = "Type minimun 3 charasters for search";
-      setError(error);
-      toast.error(error);
-      setQuotes([]);
       setSearchSubmitted(false);
+
+      toast.error("Type minimun 3 charasters for search");
       return;
     }
-    setError('');
 
     try {
-      if (text.length >= 3) {
-        setSearchSubmitted(true);
+      setSearchSubmitted(true);
 
-        const query = createSearchQueryString({ text });
-        const response = await fetch(`http://localhost:3001/quotes?${query}`);
-        const data = await response.json();
+      const query = createSearchQueryString({ text });
+      const response = await fetch(`http://localhost:3001/quotes?${query}`);
+      if (!response.ok) {
+        const errors = await response.json();
+        if (!errors.errors) {
+          toast.error('An error occurred, please, check your input.');
+        }
 
-        setQuery(query);
-        setQuotes(data);
+        const messages = errors.errors
+          .filter(err => err.type === 'field')
+          .map(err => `${err.msg} (${err.path} ${err.value})`);
+
+        if (messages) {
+          messages.forEach(message => {
+            toast.error(message);  
+          });
+        }
+
+        return;
+      }
+
+      const data = await response.json();
+
+      setQuery(query);
+      setQuotes(data);
+
+      if (data.length == 0) {
+        toast.error("Quotes wasn't found");
       }
     } 
     catch (error) {
-      toast.error(error);
+      console.error('Error: ', error);
+      toast.error(error.msg);
     }
   };
 
@@ -64,42 +83,35 @@ export default function QuotesSearch() {
               placeholder="Search quotes"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className={
-                `flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white ${error ? ' text-red-500' : ''}`
-              }
+              className='flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white}'
             />
             <button
               type="submit"
-              className="h-full px-8 py-4 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition"
+              className="h-full px-8 py-4 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition cursor-pointer"
             >
               Search
             </button>
             <ToastContainer 
-              className="centered-toast-container"
-              toastClassName="centered-toast"
-
-              hideProgressBar={false}
+              position="bottom-center"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={false}
               closeOnClick
-              draggable
+              rtl={false}
+              pauseOnFocusLoss
+              pauseOnHover
+              theme="colored"
             />
           </div>
         </form>
       </div>
 
-      {searchSubmitted ? (
+      {searchSubmitted && (
         <>
-          {quotes && quotes.length ? (
+          {quotes && quotes.length && (
             <QuotesGrid quotes={quotes} query={query} />  
-          ) : (
-            <div className="w-full flex justify-center items-center p-4">
-              <div className="text-gray-500 text-lg">Quotes wasn't found</div>
-            </div>
           )}
         </>
-      ) : (
-        <div className="w-full flex justify-center items-center p-4 pb-0">
-          <div className="text-gray-500 text-lg">Make search for the Quotes</div>
-        </div>
       )}
     </div>
   );

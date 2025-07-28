@@ -36,7 +36,6 @@ export default function QuoteCard({ quote, query }) {
     if (el) {
       const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
       const maxHeight = lineHeight * 3;
-      // Проверяем на clamped всегда!
       setClamped(el.scrollHeight > maxHeight + 2);
     }
   }, [quote.text, query]);
@@ -50,7 +49,7 @@ export default function QuoteCard({ quote, query }) {
     >
       <div
         ref={textRef}
-        className={`text-lg transition-all ${expanded ? "" : "line-clamp-3"}`}
+        className={`text-sm transition-all ${expanded ? "" : "line-clamp-3"}`}
         style={{overflowWrap: 'anywhere'}}
       >
         {highlightMatches({query: query, text: quote.text})}

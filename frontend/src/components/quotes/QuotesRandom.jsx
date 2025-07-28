@@ -1,5 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QuotesGrid from '@/components/quotes/QuotesGrid';
 
 export default function QuotesRandom() {
@@ -9,9 +11,35 @@ export default function QuotesRandom() {
     if (e) {
       e.preventDefault();
     }
-    const responce = await fetch('http://localhost:3001/quotes/random?limit=12');
-    const data = await responce.json();
-    setQuotes(data);
+
+    try {
+      const response = await fetch('http://localhost:3001/quotes/random?limit=12');
+      if (!response.ok) {
+        const errors = await response.json();
+        if (!errors.errors) {
+          toast.error('An error occurred, please, check your input.');
+        }
+
+        const messages = errors.errors
+          .filter(err => err.type === 'field')
+          .map(err => `${err.msg} (${err.path} ${err.value})`);
+
+        if (messages) {
+          messages.forEach(message => {
+            toast.error(message);  
+          });
+        }
+
+        return;
+      }
+
+      const data = await response.json();
+      setQuotes(data);
+    }
+    catch (error) {
+      console.error('Error: ', error);
+      toast.error(error.msg);
+    }
   };
 
   useEffect(() => {
@@ -31,6 +59,17 @@ export default function QuotesRandom() {
       </div>
 
       <QuotesGrid quotes={quotes} />
+      <ToastContainer 
+        position="bottom-center"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }
