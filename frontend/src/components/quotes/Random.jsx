@@ -1,7 +1,8 @@
+'use client';
+
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import QuotesGrid from '@/components/quotes/Quotes';
 
 const URL_QUOTES_RANDOM = 'quotes/random';
@@ -61,17 +62,6 @@ export default function Random() {
       </div>
 
       <QuotesGrid quotes={quotes} />
-      <ToastContainer 
-        position="bottom-center"
-        autoClose={3000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 }

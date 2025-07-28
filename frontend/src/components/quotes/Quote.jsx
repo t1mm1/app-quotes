@@ -1,4 +1,7 @@
+'use client'
+
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function ({ quote, query }) {
   const [expanded, setExpanded] = useState(false);
@@ -43,9 +46,6 @@ export default function ({ quote, query }) {
   return (
     <div
       className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200"
-      tabIndex={0}
-      role="button"
-      aria-expanded={expanded}
     >
       <div
         ref={textRef}
@@ -54,18 +54,32 @@ export default function ({ quote, query }) {
       >
         {highlightMatches({query: query, text: quote.text})}
       </div>
-      {clamped && (
-        <div className="mt-1 mb-2">
+      <div className="mt-1 mb-2">
+        {clamped && (
           <button
-            className="text-blue-600 hover:underline text-sm cursor-pointer"
+            className="text-blue-600 hover:underline text-sm cursor-pointer mr-2"
             onClick={() => setExpanded(exp => !exp)}
             aria-label={expanded ? "hide" : "more"}
             tabIndex={-1}
           >
-            {expanded ? "hide ↑" : "more ↓"}
+            {expanded ? (
+              <span>hide &uarr;</span>
+            ) : (
+              <span>more &darr;</span>
+            )}
           </button>
-        </div>
-      )}
+        )}
+        <Link
+          href={`/quotes/${quote.id}`}
+          className=" text-blue-600 hover:underline text-sm cursor-pointer"
+          title="Open"
+          tabIndex={0}
+          aria-label="Open quote page"
+          passHref
+        >
+          read<span className="relative -top-0.5">&rarr;</span>
+        </Link>
+      </div>
       <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
       <div className="flex flex-wrap mt-2">
         {quote.categories.map((category) => (

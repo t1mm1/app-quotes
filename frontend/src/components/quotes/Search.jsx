@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import Form from '@/components/form/Search';
 import QuotesGrid from '@/components/quotes/Quotes';
 
@@ -80,17 +79,6 @@ export default function Search() {
     <div className='area-quotes-search'>
       <div className="p-4 pb-4 flex justify-center">
         <Form handle={handle} set={setText} />
-        <ToastContainer 
-          position="bottom-center"
-          autoClose={3000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          pauseOnHover
-          theme="colored"
-        />
       </div>
 
       {searchSubmitted && (
