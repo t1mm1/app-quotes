@@ -8,17 +8,20 @@ export default function ({ quote, query }) {
   const [clamped, setClamped] = useState(false);
   const textRef = useRef(null);
 
-  function getQueryParam({ query, param }) {
+  const getQueryParam = ({ query, param }) => {
     const params = new URLSearchParams(query);
     return params.get(param) || '';
-  }
+  };
 
-  function highlightMatches({ query, text }) {
+  const highlightText = ({ query, text, type }) => {
     if (!query) {
       return text;
     }
 
-    const highlight = getQueryParam({ query: query, param: 'text' });
+    const highlight = getQueryParam({ query: query, param: type });
+    if (!highlight) {
+      return text;
+    }
 
     const regex = new RegExp(
       `(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
@@ -28,14 +31,31 @@ export default function ({ quote, query }) {
 
     return parts.map((part, i) =>
       regex.test(part) ? (
-        <span key={i} className="font-bold">
+        <span key={i} className="font-bold text-red-500">
           {part}
         </span>
       ) : (
         <React.Fragment key={i}>{part}</React.Fragment>
       )
     );
-  }
+  };
+
+  const highlightCategory = ({ query, category, type }) => {
+    if (!query) {
+      return category;
+    }
+
+    const highlight = getQueryParam({ query: query, param: type });
+    if (!highlight) {
+      return category;
+    }
+
+    if (category.toLowerCase() === highlight.toLowerCase()) {
+      return <span className="font-bold text-red-500">{category}</span>;
+    } else {
+      return category;
+    }
+  };
 
   useEffect(() => {
     const el = textRef.current;
@@ -53,7 +73,7 @@ export default function ({ quote, query }) {
         className={`text-sm transition-all ${expanded ? '' : 'line-clamp-3'}`}
         style={{ overflowWrap: 'anywhere' }}
       >
-        {highlightMatches({ query: query, text: quote.text })}
+        {highlightText({ query: query, text: quote.text, type: 'text' })}
       </div>
       <div className="mt-1 mb-2">
         {clamped && (
@@ -80,13 +100,22 @@ export default function ({ quote, query }) {
       <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
       <div className="flex flex-wrap mt-2">
         {quote.categories.map((category) => (
-          <span
+          <Link
+            href={`/?category=${encodeURIComponent(category)}`}
             key={category}
-            title={`Category: ${category}`}
-            className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-default"
           >
-            {category}
-          </span>
+            <span
+              key={category}
+              title={`Category: ${category}`}
+              className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
+            >
+              {highlightCategory({
+                query: query,
+                category: category,
+                type: 'category',
+              })}
+            </span>
+          </Link>
         ))}
       </div>
     </div>

@@ -1,15 +1,21 @@
 'use client';
 
-export default function Search({ handle, set }) {
+export default function Search({ handle, text, set }) {
   return (
-    <form className="relative w-full max-w-3xl" onSubmit={(e) => handle(e)}>
-      <div className="flex items-center border border-gray-300 rounded overflow-hidden bg-white shadow-sm dark:bg-gray-800 dark:border-gray-600">
+    <form
+      className="relative w-full max-w-3xl"
+      onSubmit={(e) => {
+        handle({ e, text });
+      }}
+    >
+      <div className="flex gap-x-2 overflow-hidden items-center bg-white">
         <input
           id="text"
           type="text"
           placeholder="Search quotes"
+          value={text}
           onChange={(e) => set(e.target.value)}
-          className="flex-grow px-8 py-4 focus:outline-none bg-transparent text-gray-900 dark:text-white}"
+          className="flex-grow px-8 py-4 border border-gray-300 focus:outline-none bg-transparent text-gray-900 dark:text-white"
         />
         <button
           type="submit"

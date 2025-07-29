@@ -3,24 +3,24 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Loader from '@/components/common/Loader';
 
 export default function Single({ id }) {
-  const URL_QUOTES_QUOTE = 'quotes';
   const [quote, setQuote] = useState(null);
 
-  const isValidId = (id) => {
+  const isValidId = ({ d }) => {
     return id > 0 ? true : false;
   };
 
   const fetchQuote = async () => {
-    if (!isValidId(id)) {
+    if (!isValidId({ id })) {
       toast.error(`Invalid quote ID. ID must be an integer greated than 0`);
       return;
     }
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_QUOTE}/${id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_HOST}/${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_GET_QUOTE}/${id}`
       );
 
       if (!response.ok) {
@@ -71,7 +71,7 @@ export default function Single({ id }) {
           <div className="mb-2">
             <Link
               href={`/random`}
-              className="text-blue-600 hover:underline text-sm cursor-pointer"
+              className="text-blue-600 hover:underline text-sm cursor-pointer pb-1"
               title="Open"
               tabIndex={0}
               aria-label="Go gome"
@@ -80,23 +80,30 @@ export default function Single({ id }) {
               <span className="relative -top-0.5">&larr;</span> back
             </Link>
           </div>
-          {quote && (
+          {quote ? (
             <>
               <div className={`text-sm`}>{quote.text}</div>
               <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
               <div className="flex flex-wrap mt-2">
                 {quote.categories &&
                   quote.categories.map((category) => (
-                    <span
+                    <Link
+                      href={`/?category=${encodeURIComponent(category)}`}
                       key={category}
-                      title={`Category: ${category}`}
-                      className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-default"
                     >
-                      {category}
-                    </span>
+                      <span
+                        key={category}
+                        title={`Category: ${category}`}
+                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
+                      >
+                        {category}
+                      </span>
+                    </Link>
                   ))}
               </div>
             </>
+          ) : (
+            <Loader />
           )}
         </div>
       </div>

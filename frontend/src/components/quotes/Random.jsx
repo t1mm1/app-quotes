@@ -4,8 +4,31 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import QuotesGrid from '@/components/quotes/Quotes';
+import Loader from '@/components/common/Loader';
 
-const URL_QUOTES_RANDOM = 'quotes/random';
+const hasValidationErrors = async ({ response }) => {
+  if (response.ok) {
+    return false;
+  }
+
+  const errors = await response.json();
+  if (!errors.errors || !Array.isArray(errors.errors)) {
+    toast.error(`An error occurred, please, check your input.`);
+    return true;
+  }
+
+  const messages = errors.errors
+    .filter((err) => err.type === 'field')
+    .map((err) => `${err.msg} (${err.path} ${err.value})`);
+
+  if (messages) {
+    messages.forEach((message) => {
+      toast.error(message);
+    });
+  }
+
+  return true;
+};
 
 export default function Random() {
   const [quotes, setQuotes] = useState([]);
@@ -17,24 +40,10 @@ export default function Random() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/${URL_QUOTES_RANDOM}?limit=12`
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_HOST}/${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_QUOTES_RANDOM}?limit=12`
       );
-      if (!response.ok) {
-        const errors = await response.json();
-        if (!errors.errors) {
-          toast.error(`An error occurred, please, check your input.`);
-        }
 
-        const messages = errors.errors
-          .filter((err) => err.type === 'field')
-          .map((err) => `${err.msg} (${err.path} ${err.value})`);
-
-        if (messages) {
-          messages.forEach((message) => {
-            toast.error(message);
-          });
-        }
-
+      if (await hasValidationErrors({ response })) {
         return;
       }
 
@@ -62,7 +71,7 @@ export default function Random() {
         </a>
       </div>
 
-      <QuotesGrid quotes={quotes} />
+      {quotes && quotes.length ? <QuotesGrid quotes={quotes} /> : <Loader />}
     </div>
   );
 }
