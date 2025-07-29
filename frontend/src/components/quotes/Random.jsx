@@ -75,12 +75,8 @@ export default function Random() {
           Click to discover a random quotes
         </a>
       </div>
-
-      {loading ? (
-        <Loader />
-      ) : quotes && quotes.length ? (
-        <QuotesGrid quotes={quotes} />
-      ) : null}
+      {quotes && quotes.length && <QuotesGrid quotes={quotes} />}
+      {loading && <Loader />}
     </div>
   );
 }

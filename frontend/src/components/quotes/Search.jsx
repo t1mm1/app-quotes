@@ -117,12 +117,10 @@ export default function Search() {
       <div className="p-4 pb-4 flex justify-center">
         <Form handle={handle} text={text} set={setText} />
       </div>
-      {searchSubmitted &&
-        (loading ? (
-          <Loader />
-        ) : quotes && quotes.length ? (
-          <QuotesGrid quotes={quotes} query={query} />
-        ) : null)}
+      {searchSubmitted && quotes && quotes.length && (
+        <QuotesGrid quotes={quotes} />
+      )}
+      {loading && <Loader />}
     </div>
   );
 }

@@ -85,9 +85,7 @@ export default function Single({ id }) {
               <span className="relative -top-0.5">&larr;</span> back
             </Link>
           </div>
-          {loading ? (
-            <Loader />
-          ) : quote ? (
+          {quote && (
             <>
               <div className={`text-sm`}>{quote.text}</div>
               <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
@@ -109,7 +107,8 @@ export default function Single({ id }) {
                   ))}
               </div>
             </>
-          ) : null}
+          )}
+          {loading && <Loader />}
         </div>
       </div>
     </div>
