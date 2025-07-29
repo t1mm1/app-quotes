@@ -31,6 +31,7 @@ const hasValidationErrors = async ({ response }) => {
 };
 
 export default function Random() {
+  const [loading, setLoading] = useState(false);
   const [quotes, setQuotes] = useState([]);
 
   const fetchQuotes = async (e) => {
@@ -39,6 +40,8 @@ export default function Random() {
     }
 
     try {
+      setLoading(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_HOST}/${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_QUOTES_RANDOM}?limit=12`
       );
@@ -52,6 +55,8 @@ export default function Random() {
     } catch (error) {
       console.error('Error: ', error);
       toast.error(error.msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +76,11 @@ export default function Random() {
         </a>
       </div>
 
-      {quotes && quotes.length ? <QuotesGrid quotes={quotes} /> : <Loader />}
+      {loading ? (
+        <Loader />
+      ) : quotes && quotes.length ? (
+        <QuotesGrid quotes={quotes} />
+      ) : null}
     </div>
   );
 }

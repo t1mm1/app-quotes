@@ -44,6 +44,7 @@ const hasValidationErrors = async ({ response }) => {
 };
 
 export default function Search() {
+  const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
   const [category, setCategory] = useState('');
   const [query, setQuery] = useState('');
@@ -78,6 +79,7 @@ export default function Search() {
 
     try {
       setSubmitted(true);
+      setLoading(true);
 
       const query = queryString({ text, category });
       router.push(`?${query}`, { scroll: false });
@@ -105,6 +107,8 @@ export default function Search() {
     } catch (error) {
       console.error('Error: ', error);
       toast.error(error.msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,11 +117,12 @@ export default function Search() {
       <div className="p-4 pb-4 flex justify-center">
         <Form handle={handle} text={text} set={setText} />
       </div>
-      {searchSubmitted && quotes && quotes.length ? (
-        <QuotesGrid quotes={quotes} query={query} />
-      ) : (
-        <Loader />
-      )}
+      {searchSubmitted &&
+        (loading ? (
+          <Loader />
+        ) : quotes && quotes.length ? (
+          <QuotesGrid quotes={quotes} query={query} />
+        ) : null)}
     </div>
   );
 }

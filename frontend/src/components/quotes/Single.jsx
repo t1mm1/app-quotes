@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Loader from '@/components/common/Loader';
 
 export default function Single({ id }) {
+  const [loading, setLoading] = useState(false);
   const [quote, setQuote] = useState(null);
 
   const isValidId = ({ d }) => {
@@ -19,6 +20,8 @@ export default function Single({ id }) {
     }
 
     try {
+      setLoading(true);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_HOST}/${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT_GET_QUOTE}/${id}`
       );
@@ -54,6 +57,8 @@ export default function Single({ id }) {
     } catch (error) {
       toast.error(error.message);
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,7 +85,9 @@ export default function Single({ id }) {
               <span className="relative -top-0.5">&larr;</span> back
             </Link>
           </div>
-          {quote ? (
+          {loading ? (
+            <Loader />
+          ) : quote ? (
             <>
               <div className={`text-sm`}>{quote.text}</div>
               <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
@@ -102,9 +109,7 @@ export default function Single({ id }) {
                   ))}
               </div>
             </>
-          ) : (
-            <Loader />
-          )}
+          ) : null}
         </div>
       </div>
     </div>
