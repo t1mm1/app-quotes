@@ -1,61 +1,54 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
 
-export default function ({ quote, query }) {
+const getQueryParam = ({ query, param }) => {
+  const params = new URLSearchParams(query);
+  return params.get(param) || '';
+};
+
+const highlightText = ({ query, text, type }) => {
+  if (!query) return text;
+
+  const highlight = getQueryParam({ query: query, param: type });
+  if (!highlight) return text;
+
+  const regex = new RegExp(
+    `(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+    'gi'
+  );
+  const parts = text.split(regex);
+
+  return parts.map((part, i) =>
+    regex.test(part) ? (
+      <span key={i} className="font-bold text-red-500">
+        {part}
+      </span>
+    ) : (
+      <React.Fragment key={i}>{part}</React.Fragment>
+    )
+  );
+};
+
+const highlightCategory = ({ query, category, type }) => {
+  if (!query) return category;
+
+  const highlight = getQueryParam({ query: query, param: type });
+  if (!highlight) return category;
+
+  if (category.toLowerCase() === highlight.toLowerCase()) {
+    return <span className="font-bold text-red-500">{category}</span>;
+  }
+
+  return category;
+};
+
+export default function Quote({ quote, query }) {
   const [expanded, setExpanded] = useState(false);
   const [clamped, setClamped] = useState(false);
   const textRef = useRef(null);
-
-  const getQueryParam = ({ query, param }) => {
-    const params = new URLSearchParams(query);
-    return params.get(param) || '';
-  };
-
-  const highlightText = ({ query, text, type }) => {
-    if (!query) {
-      return text;
-    }
-
-    const highlight = getQueryParam({ query: query, param: type });
-    if (!highlight) {
-      return text;
-    }
-
-    const regex = new RegExp(
-      `(${highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
-      'gi'
-    );
-    const parts = text.split(regex);
-
-    return parts.map((part, i) =>
-      regex.test(part) ? (
-        <span key={i} className="font-bold text-red-500">
-          {part}
-        </span>
-      ) : (
-        <React.Fragment key={i}>{part}</React.Fragment>
-      )
-    );
-  };
-
-  const highlightCategory = ({ query, category, type }) => {
-    if (!query) {
-      return category;
-    }
-
-    const highlight = getQueryParam({ query: query, param: type });
-    if (!highlight) {
-      return category;
-    }
-
-    if (category.toLowerCase() === highlight.toLowerCase()) {
-      return <span className="font-bold text-red-500">{category}</span>;
-    } else {
-      return category;
-    }
-  };
 
   useEffect(() => {
     const el = textRef.current;
@@ -105,7 +98,6 @@ export default function ({ quote, query }) {
             key={category}
           >
             <span
-              key={category}
               title={`Category: ${category}`}
               className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
             >
@@ -121,3 +113,13 @@ export default function ({ quote, query }) {
     </div>
   );
 }
+
+Quote.propTypes = {
+  quote: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    text: PropTypes.string.isRequired,
+    author: PropTypes.string,
+    categories: PropTypes.arrayOf(PropTypes.string),
+  }),
+  query: PropTypes.string,
+};

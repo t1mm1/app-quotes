@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import Loader from '@/components/common/Loader';
 
@@ -15,7 +16,7 @@ export default function Single({ id }) {
 
   const fetchQuote = async () => {
     if (!isValidId({ id })) {
-      toast.error(`Invalid quote ID. ID must be an integer greated than 0`);
+      toast.error(`Invalid quote ID. ID must be an integer greated than 0.`);
       return;
     }
 
@@ -64,7 +65,7 @@ export default function Single({ id }) {
 
   useEffect(() => {
     fetchQuote();
-  }, []);
+  }, [id]);
 
   return (
     <div
@@ -97,7 +98,6 @@ export default function Single({ id }) {
                       key={category}
                     >
                       <span
-                        key={category}
                         title={`Category: ${category}`}
                         className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-sm mr-2 mb-2 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
                       >
@@ -114,3 +114,7 @@ export default function Single({ id }) {
     </div>
   );
 }
+
+Single.propTypes = {
+  id: PropTypes.number.isRequired,
+};

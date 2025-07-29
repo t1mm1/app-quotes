@@ -29,6 +29,8 @@ export default function NotFound() {
               title="Get sources on GitHub"
               tabIndex={0}
               aria-label="Get sources on GitHub"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Learn more <span aria-hidden="true">→</span>
             </Link>

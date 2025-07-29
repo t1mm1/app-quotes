@@ -3,23 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-
 export default function Welcome() {
-  const [params, setParams] = useState(false);
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    setParams(false);
-    const text = searchParams.get('text') || '';
-    const category = searchParams.get('category') || '';
-
-    if (text || category) {
-      setParams(true);
-    }
-  }, [searchParams]);
-
   return (
     <>
       <div className="area-welcome">
@@ -29,17 +13,14 @@ export default function Welcome() {
               <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
                 Quotes for Every Occasion
               </h1>
-              {!params && (
-                <p className="mt-8 font-medium text-pretty text-gray-500">
-                  Discover a vast collection of over 500,000 quotes, ranging
-                  from ancient philosophers to world-renowned authors and
-                  thinkers. Our service offers you daily inspiration, wisdom,
-                  and motivation, making it easy to find the right words for any
-                  situation. Whether you’re searching for guidance, reflection,
-                  or a spark of creativity, you’ll find quotes to suit every
-                  mood and need.
-                </p>
-              )}
+              <p className="mt-8 font-medium text-pretty text-gray-500">
+                Discover a vast collection of over 500,000 quotes, ranging from
+                ancient philosophers to world-renowned authors and thinkers. Our
+                service offers you daily inspiration, wisdom, and motivation,
+                making it easy to find the right words for any situation.
+                Whether you’re searching for guidance, reflection, or a spark of
+                creativity, you’ll find quotes to suit every mood and need.
+              </p>
             </div>
           </div>
         </div>

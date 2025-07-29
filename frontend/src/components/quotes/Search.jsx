@@ -9,20 +9,15 @@ import Loader from '@/components/common/Loader';
 
 const queryString = ({ text, category }) => {
   const params = new URLSearchParams();
-  if (text) {
-    params.append('text', text);
-  }
-  if (category) {
-    params.append('category', category);
-  }
+
+  if (text) params.append('text', text);
+  if (category) params.append('category', category);
 
   return params.toString();
 };
 
 const hasValidationErrors = async ({ response }) => {
-  if (response.ok) {
-    return false;
-  }
+  if (response.ok) return false;
 
   const errors = await response.json();
   if (!errors.errors || !Array.isArray(errors.errors)) {
@@ -118,7 +113,7 @@ export default function Search() {
         <Form handle={handle} text={text} set={setText} />
       </div>
       {searchSubmitted && quotes && quotes.length && (
-        <QuotesGrid quotes={quotes} />
+        <QuotesGrid quotes={quotes} query={query} />
       )}
       {loading && <Loader />}
     </div>
