@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
@@ -13,19 +14,24 @@ export default function NotFound() {
             Sorry, we couldn’t find the page you’re looking for.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href="/"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            <Link
+              href={`/`}
+              className="rounded-md px-3.5 py-2.5 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition"
+              title="Go home"
+              tabIndex={0}
+              aria-label="Go home"
             >
-              Go back home
-            </a>
-            <a
-              href="https://github.com/t1mm1/app-quotes"
-              target="_blank"
+              Go home
+            </Link>
+            <Link
+              href={`https://github.com/t1mm1/app-quotes`}
               className="text-sm/6 font-semibold text-gray-900"
+              title="Get sources on GitHub"
+              tabIndex={0}
+              aria-label="Get sources on GitHub"
             >
               Learn more <span aria-hidden="true">→</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

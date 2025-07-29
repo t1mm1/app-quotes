@@ -67,13 +67,14 @@ export default function Random() {
   return (
     <div className="area-quotes-random">
       <div className="flex pt-4 pb-4 items-center justify-center gap-x-6">
-        <a
-          href="#"
-          onClick={fetchQuotes}
-          className="rounded-md px-3.5 py-2.5 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition"
+        <button
+          className="rounded-md px-3.5 py-2.5 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition cursor-pointer"
+          onClick={() => fetchQuotes()}
+          aria-label="Click to discover a random quotes"
+          tabIndex={-1}
         >
           Click to discover a random quotes
-        </a>
+        </button>
       </div>
       {quotes && quotes.length && <QuotesGrid quotes={quotes} />}
       {loading && <Loader />}

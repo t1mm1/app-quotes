@@ -77,7 +77,7 @@ export default function Single({ id }) {
             <Link
               href={`/random`}
               className="text-blue-600 hover:underline text-sm cursor-pointer pb-1"
-              title="Open"
+              title="Home"
               tabIndex={0}
               aria-label="Go gome"
               passHref
