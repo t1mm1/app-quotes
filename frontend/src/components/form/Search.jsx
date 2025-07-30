@@ -14,7 +14,7 @@ export default function Search({ handle, text, set }) {
         <input
           id="text"
           type="text"
-          placeholder="Search quotes"
+          placeholder="Please, enter 3 or more characters to search quotes"
           value={text}
           onChange={(e) => set(e.target.value)}
           className="flex-grow px-8 py-4 border border-gray-300 focus:outline-none bg-transparent text-gray-900 dark:text-white rounded-md"
