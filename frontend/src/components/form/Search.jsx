@@ -1,6 +1,8 @@
 'use client';
 
 export default function Search({ handle, text, set }) {
+  const isDisabled = !(text.trim().length === 0 || text.trim().length > 2);
+
   return (
     <form
       className="relative w-full max-w-3xl"
@@ -8,7 +10,7 @@ export default function Search({ handle, text, set }) {
         handle({ e, text });
       }}
     >
-      <div className="flex gap-x-1 overflow-hidden items-center bg-white">
+      <div className="flex gap-x-1 overflow-hidden items-center bg-white relative">
         <input
           id="text"
           type="text"
@@ -19,7 +21,15 @@ export default function Search({ handle, text, set }) {
         />
         <button
           type="submit"
-          className="h-full px-8 py-4 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition cursor-pointer rounded-md"
+          className={`h-full px-8 py-4 rounded-md transition cursor-pointer focus:outline-none ${
+            isDisabled
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+          title="Search quotes"
+          tabIndex={0}
+          aria-label="Search quotes"
+          disabled={isDisabled}
         >
           Search
         </button>
