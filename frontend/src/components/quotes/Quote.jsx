@@ -60,10 +60,12 @@ export default function Quote({ quote, query }) {
   }, [quote.text, query]);
 
   return (
-    <div className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] transition-colors duration-200">
+    <div className="area-quote relative p-4 border border-gray-100 rounded-sm bg-[#fbfbfb] hover:bg-[#f5f5f5] dark:bg-[#e5e5e5] transition-colors duration-200">
       <div
         ref={textRef}
-        className={`text-sm transition-all ${expanded ? '' : 'line-clamp-3'}`}
+        className={`text-sm transition-all dark:text-gray-950 ${
+          expanded ? '' : 'line-clamp-3'
+        }`}
         style={{ overflowWrap: 'anywhere' }}
       >
         {highlightText({ query: query, text: quote.text, type: 'text' })}
@@ -90,7 +92,9 @@ export default function Quote({ quote, query }) {
           read<span className="relative -top-0.5">&rarr;</span>
         </Link>
       </div>
-      <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
+      <p className="text-left text-sm pt-2 pb-2 dark:text-gray-950">
+        {quote.author}
+      </p>
       <div className="flex flex-wrap mt-2">
         {quote.categories.map((category) => (
           <Link

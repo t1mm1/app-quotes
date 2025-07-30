@@ -88,8 +88,10 @@ export default function Single({ id }) {
           </div>
           {quote && (
             <>
-              <div className={`text-sm`}>{quote.text}</div>
-              <p className="text-left text-sm pt-2 pb-2 ">{quote.author}</p>
+              <div className={`text-sm dark:text-gray-950`}>{quote.text}</div>
+              <p className="text-left text-sm pt-2 pb-2 dark:text-gray-950">
+                {quote.author}
+              </p>
               <div className="flex flex-wrap mt-2">
                 {quote.categories &&
                   quote.categories.map((category) => (

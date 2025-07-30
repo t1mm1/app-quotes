@@ -10,7 +10,7 @@ export default function Welcome() {
         <div className="relative px-6 pt-14 pb-4 lg:px-8">
           <div className="mx-auto max-w-2xl">
             <div className="text-center">
-              <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
+              <h1 className="text-5xl font-semibold tracking-tight text-balance wtite:text-gray-700 dark:text-white sm:text-7xl">
                 Quotes for Every Occasion
               </h1>
               <p className="mt-8 font-medium text-pretty text-gray-500">
@@ -36,7 +36,7 @@ export default function Welcome() {
           </Link>
           <Link
             href={`https://github.com/t1mm1/app-quotes`}
-            className="text-sm/6 font-semibold text-gray-900"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
             title="Get sources on GitHub"
             tabIndex={0}
             aria-label="Get sources on GitHub"
